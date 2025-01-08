@@ -1,0 +1,19 @@
+#Spring config
+spring:
+  application:
+    name: tests-service
+
+  cloud:
+    discovery:
+      enabled: true
+# Server config
+server:
+  port: 0
+
+# Eureka config
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
