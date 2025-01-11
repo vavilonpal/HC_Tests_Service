@@ -11,12 +11,13 @@ import org.combs.micro.hc_tests_service.enums.TestType;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "tests")
+@Table(name = "school_tests", schema = "hc_school_tests_sc")
 @Entity
 public class SchoolTest {
 
@@ -34,9 +35,10 @@ public class SchoolTest {
     @Enumerated(EnumType.STRING)
     private TestType type;
 
-    @Column(name = "school_subject", nullable = false, length = 100)
-    @NotBlank(message = "Введите предмет")
-    private String schoolSubject;
+
+    @ManyToOne
+    @JoinColumn(name = "school_subject_id")
+    private SchoolSubject schoolSubject;
 
     @Column(name = "complexity")
     @Enumerated(EnumType.STRING)
@@ -44,7 +46,6 @@ public class SchoolTest {
 
     @Column(name = "class_level", nullable = false)
     private Integer classLevel;
-
 
     @Column(name = "description")
     private String description;
@@ -54,6 +55,9 @@ public class SchoolTest {
 
     @Column(name = "duration")
     private Integer duration;
+
+    @OneToMany
+    private List<Question> questions;
 
 
 }

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "results")
+@Table(name = "results", schema = "hc_school_tests_sc")
 @Entity
 public class Result {
     @Id
@@ -27,10 +27,14 @@ public class Result {
     @Column(name = "student_id", nullable = false)
     private Long studentId;
 
+    @Column(name = "attempt")
+    private Integer attempt;
+
     @Column(name = "score", nullable = false)
-    private Short score;
-    @Column(name = "rabk_score")
-    private Short rankScore;
+    private Integer score;
+
+    @Column(name = "rank_score")
+    private Integer rankScore;
 
     @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt = LocalDateTime.now();

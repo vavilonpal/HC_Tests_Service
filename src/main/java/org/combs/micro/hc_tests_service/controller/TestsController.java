@@ -2,6 +2,7 @@ package org.combs.micro.hc_tests_service.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
 import org.combs.micro.hc_tests_service.enums.Complexity;
 import org.combs.micro.hc_tests_service.service.TestService;
@@ -46,7 +47,7 @@ public class TestsController {
     }
 
     @GetMapping("/class-lvl/{level}")
-    public ResponseEntity<List<SchoolTest>> getTestsByClassLevel(@PathVariable Short level){
+    public ResponseEntity<List<SchoolTest>> getTestsByClassLevel(@PathVariable Integer level){
         List<SchoolTest> schoolTests = testService.getTestsByClassLevel(level);
         if (schoolTests.isEmpty()){
             return ResponseEntity.notFound().build();
@@ -64,7 +65,7 @@ public class TestsController {
         return ResponseEntity.ok(schoolTests);
     }
     @GetMapping("/school-subject/{subject}")
-    public ResponseEntity<List<SchoolTest>> getTestsBySchoolSubject(@PathVariable String subject){
+    public ResponseEntity<List<SchoolTest>> getTestsBySchoolSubject(@PathVariable SchoolSubject subject){
         List<SchoolTest> schoolTests = testService.getTestsBySchoolSubject(subject);
         if (schoolTests.isEmpty()){
             return ResponseEntity.notFound().build();

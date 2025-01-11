@@ -2,9 +2,11 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.Question;
+import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +23,8 @@ public class QuestionService {
         return questionRepository.findById(id);
     }
 
-    public Question createQuestion(Question question) {
-        return questionRepository.save(question);
+    public void createQuestion(Question question) {
+        questionRepository.save(question);
     }
 
     public Question updateQuestion(Long id, Question updatedQuestion) {
@@ -32,9 +34,13 @@ public class QuestionService {
             question.setDescription(updatedQuestion.getDescription());
             question.setAnswer(updatedQuestion.getAnswer());
             question.setType(updatedQuestion.getType());
-                //question.setOptions(updatedQuestion.getOptions());
             question.setDifficulty(updatedQuestion.getDifficulty());
+            question.setRankPoints(updatedQuestion.getRankPoints());
             return questionRepository.save(question);
-        }).orElseThrow(() -> new RuntimeException("Question not found"));
+        }).orElseThrow(() -> new EntityNotFoundException("Question not found"));
+    }
+
+    public List<Question> getQuestionsBySubject(SchoolSubject subject){
+        return questionRepository.findAllBySchoolSubject(subject);
     }
 }

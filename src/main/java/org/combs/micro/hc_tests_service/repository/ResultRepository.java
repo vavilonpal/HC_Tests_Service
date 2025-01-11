@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
     List<Result> getResultsByStudentId(Long studentId);
-    List<Result>getResultsBySchool();
+    //List<Result>getResultsBySchoolId();
 }
