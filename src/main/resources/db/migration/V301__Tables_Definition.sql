@@ -10,7 +10,8 @@ CREATE TABLE if not exists hc_school_tests_sc.questions
     teacher_id     BIGINT       NOT NULL,                       -- ID учителя (внешний ключ, если нужно)                       -- Предмет
     school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
     description    TEXT         NOT NULL,                       -- Формулировка вопроса
-    answer         TEXT         NOT NULL,                       -- Правильный ответ
+    answer_type    varchar(55)  NOT NULL,
+    answer         TEXT         ,                       -- Правильный ответ
     type           VARCHAR(50)  NOT NULL,                       -- Тип вопроса (например, "single_choice", "multiple_choice", "text")
     difficulty     SMALLINT CHECK (difficulty BETWEEN 1 AND 5), -- Сложность (1-легкий, 5-сложный)
     test_points SMALLINT DEFAULT 1 CHECK (hc_school_tests_sc.questions.test_points > 0), -- Баллы за правильный ответ

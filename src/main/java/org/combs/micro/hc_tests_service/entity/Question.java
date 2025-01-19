@@ -29,9 +29,10 @@ public class Question {
     @Column(name = "teacher_id", nullable = false)
     private Long teacherId;
 
-    @ManyToOne
-    @JoinColumn(name = "school_subj_id")
-    private SchoolSubject schoolSubject;
+    //@ManyToOne
+    @Column(name = "school_subject")
+    //@JoinColumn(name = "school_subject")
+    private String schoolSubject;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;

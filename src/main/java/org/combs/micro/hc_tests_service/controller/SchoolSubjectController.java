@@ -47,5 +47,5 @@ public class SchoolSubjectController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/tests")
+    //@GetMapping("/tests")
 }
