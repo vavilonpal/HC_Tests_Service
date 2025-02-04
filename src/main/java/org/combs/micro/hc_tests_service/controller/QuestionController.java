@@ -2,17 +2,23 @@ package org.combs.micro.hc_tests_service.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.combs.micro.hc_tests_service.converter.QuestionTypeConverter;
 import org.combs.micro.hc_tests_service.entity.Question;
-import org.combs.micro.hc_tests_service.entity.Result;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
-import org.combs.micro.hc_tests_service.entity.SchoolTest;
+import org.combs.micro.hc_tests_service.enums.QuestionType;
+import org.combs.micro.hc_tests_service.mapper.QuestionMapper;
+import org.combs.micro.hc_tests_service.request.QuestionRequest;
+import org.combs.micro.hc_tests_service.response.QuestionResponse;
 import org.combs.micro.hc_tests_service.service.QuestionService;
-import org.combs.micro.hc_tests_service.service.TestService;
+import org.combs.micro.hc_tests_service.service.SchoolSubjectService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,24 +26,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionMapper questionMapper;
+    private final SchoolSubjectService schoolSubjectService;
+    private final QuestionTypeConverter questionTypeConverter;
 
     @GetMapping
-    public ResponseEntity<List<Question>> getALlQuestions(){
-        List<Question> questions = questionService.getAllQuestions();
-        if (questions.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<Page<QuestionResponse>> getALlQuestions(Pageable pageable,
+                                                          @RequestParam(required = false)String questionType,
+                                                          @RequestParam(required = false)Integer rankPoints,
+                                                          @RequestParam(required = false)Integer difficulty,
+                                                          @RequestParam(required = false)String subjectName
+                                                          ){
+        QuestionType type = questionTypeConverter.convert(questionType);
+        SchoolSubject schoolSubject = schoolSubjectService.getSubjectByName(subjectName);
+
+        Page<QuestionResponse> questions = questionService.getPageableQuestions(pageable, type,rankPoints,difficulty,schoolSubject);
+
         return ResponseEntity.ok(questions);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestion(@PathVariable Long id){
-        return questionService.getQuestionById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(()-> ResponseEntity.badRequest().build());
-    }
+    public ResponseEntity<QuestionResponse> getQuestion(@PathVariable Long id){
+        QuestionResponse questionResponse = questionMapper.toResponse(questionService.getQuestionById(id));
 
+        return ResponseEntity.ok(questionResponse);
+    }
 
     @PostMapping
     public ResponseEntity<?> createQuestion(@RequestBody @Validated Question question,
@@ -50,17 +64,17 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Question> updateResult(@PathVariable Long id, @RequestBody Question updatedQuestion) {
-        return ResponseEntity.ok(questionService.updateQuestion(id, updatedQuestion));
-
-    }
-
-    @GetMapping("/school-subject/{subject}")
-    public ResponseEntity<List<Question>> getTestsBySchoolSubject(@PathVariable SchoolSubject subject){
-        List<Question> questions = questionService.getQuestionsBySubject(subject);
-        if (questions.isEmpty()){
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> updateResult(@PathVariable Long id,
+                                                         @RequestBody @Valid QuestionRequest request,
+                                                         BindingResult bindingResult) {
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest()
+                    .body(bindingResult.getAllErrors());
         }
-        return ResponseEntity.ok(questions);
+
+        QuestionResponse response = questionService.updateQuestion(id, request);
+
+        return ResponseEntity.ok(response);
+
     }
 }

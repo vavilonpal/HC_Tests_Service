@@ -5,6 +5,7 @@ import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.repository.SchoolSubjectRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,5 +26,10 @@ public class SchoolSubjectService {
     public SchoolSubject saveSubject(SchoolSubject subject) {
         repository.save(subject);
         return subject;
+    }
+
+    public SchoolSubject getSubjectByName(String subjectName) {
+        return repository.findSchoolSubjectByName(subjectName)
+                .orElseThrow(()->new EntityNotFoundException(String.format("School subject with name: %s not found", subjectName)));
     }
 }

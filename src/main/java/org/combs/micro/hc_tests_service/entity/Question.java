@@ -2,10 +2,7 @@ package org.combs.micro.hc_tests_service.entity;
 
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -15,12 +12,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = "schoolSubject")
+@EqualsAndHashCode(of = {"schoolSubject", "description"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "questions",schema = "hc_school_tests_sc")
 @Entity
+@Table(name = "questions",schema = "hc_school_tests_sc")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,10 +29,9 @@ public class Question {
     @Column(name = "teacher_id", nullable = false)
     private Long teacherId;
 
-    //@ManyToOne
-    @Column(name = "school_subject")
-    //@JoinColumn(name = "school_subject")
-    private String schoolSubject;
+    @ManyToOne
+    @JoinColumn(name = "school_subj_id")
+    private SchoolSubject schoolSubject;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
@@ -40,14 +39,17 @@ public class Question {
     @Column(name = "answer", nullable = false, columnDefinition = "TEXT")
     private String answer;
 
-    @Column(name = "type", nullable = false, length = 50)
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private QuestionType type;
 
     @Column(name = "difficulty")
     private Integer difficulty;
+
     @Column(name = "rank_points")
     private Integer rankPoints;
+
     @Column(name = "created_at", nullable = false, updatable = false)
+    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }

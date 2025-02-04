@@ -27,9 +27,6 @@ public class Result {
     @Column(name = "student_id", nullable = false)
     private Long studentId;
 
-    @Column(name = "attempt")
-    private Integer attempt;
-
     @Column(name = "score", nullable = false)
     private Integer score;
 

@@ -1,6 +1,8 @@
 package org.combs.micro.hc_tests_service.controller;
 
 import org.combs.micro.hc_tests_service.entity.Question;
+import org.combs.micro.hc_tests_service.entity.SchoolSubject;
+import org.combs.micro.hc_tests_service.enums.QuestionType;
 import org.combs.micro.hc_tests_service.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,10 +62,10 @@ class QuestionControllerTest {
             .builder()
             .id(1L)
             .teacherId(2L)
-            .schoolSubject("Biology")
+            .schoolSubject(new SchoolSubject(1L,"Biology"))
             .description("Test question")
             .answer("true test")
-            .type("hard")
+            .type(QuestionType.text)
             .difficulty(3)
             .rankPoints(1)
             .build();
@@ -96,7 +98,7 @@ class QuestionControllerTest {
 
         ResponseEntity<Question> getResponse = restTemplate.getForEntity(baseUrl+"/"+TEST_QUESTION.getId(), Question.class);
         assertNotNull(getResponse.getBody());
-        getResponse.getBody().setSchoolSubject("Physics");
+        getResponse.getBody().setSchoolSubject(new SchoolSubject(2L,"Physics"));
 
         restTemplate.put(baseUrl+"/"+TEST_QUESTION.getId(), getResponse);
 
