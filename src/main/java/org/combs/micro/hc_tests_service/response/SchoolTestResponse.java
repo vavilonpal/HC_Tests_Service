@@ -21,7 +21,6 @@ import java.util.List;
 @Builder
 public class SchoolTestResponse {
 
-    private Long id;
     private String title;
     private Long teacherId;
     private TestType type;

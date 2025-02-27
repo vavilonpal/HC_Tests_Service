@@ -17,7 +17,7 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findAllBySchoolSubject(SchoolSubject subject);
 
-    @Query("SELECT q FROM Question q " +
+   /* @Query("SELECT q FROM Question q " +
             "WHERE (:type IS NULL OR q.type = :type) " +
             "AND (:rank_points IS NULL OR q.rankPoints = :rank_points) " +
             "AND (:difficulty IS NULL OR q.difficulty = :difficulty) " +
@@ -27,5 +27,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
                                     @Param("rank_points") Integer rankPoints,
                                     @Param("difficultly") Integer difficulty,
                                     @Param("subject") SchoolSubject subject
-    );
+    );*/
 }

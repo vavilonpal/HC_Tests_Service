@@ -12,7 +12,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -50,16 +52,20 @@ public class SchoolTest {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at", nullable = false)
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     @Column(name = "duration")
     private Integer duration;
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "test_id")
-    private List<Question> questions = new ArrayList<>();
+    private Set<Question> questions = new HashSet<>();
+
+    @Column(name = "created_at", nullable = false)
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "updated_at", nullable = false)
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
 
 }

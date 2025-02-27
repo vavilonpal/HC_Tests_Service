@@ -34,8 +34,18 @@ public class Result {
     private Integer rankScore;
 
     @Column(name = "started_at", nullable = false)
-    private LocalDateTime startedAt = LocalDateTime.now();
+    private LocalDateTime startedAt;
 
     @Column(name = "finished_at")
     private LocalDateTime finishedAt;
+
+
+    @PrePersist
+    public  void prePersist(){
+        this.startedAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    public  void preUpdate(){
+        this.finishedAt = LocalDateTime.now();
+    }
 }

@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ResultRepository extends JpaRepository<Result, Long> {
-    List<Result> getResultsByStudentId(Long studentId);
-    //List<Result>getResultsBySchoolId();
+    List<Result> findAllByStudentId(Long studentId);
 }

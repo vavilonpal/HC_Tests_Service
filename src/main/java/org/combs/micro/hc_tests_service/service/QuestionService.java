@@ -24,37 +24,31 @@ public class QuestionService {
     public List<Question> getAllQuestions() {
         return questionRepository.findAll();
     }
-    public Page<QuestionResponse> getPageableQuestions(Pageable pageable,
+    /*public Page<Question> getPageableQuestions(Pageable pageable,
                                                        QuestionType type,
                                                        Integer rankPoints,
                                                        Integer difficulty,
                                                        SchoolSubject schoolSubject){
 
-        return questionRepository.findAllByFilters(pageable,type,rankPoints,difficulty, schoolSubject)
-                .map(questionMapper::toResponse);
-    }
+        return questionRepository.findAllByFilters(pageable,type,rankPoints,difficulty, schoolSubject);
+    }*/
 
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Question not found"));
     }
 
-
     public void createQuestion(Question question) {
         questionRepository.save(question);
     }
 
-    public QuestionResponse updateQuestion(Long id, QuestionRequest request) {
+    public Question updateQuestion(Long id, QuestionRequest request) {
         Question question = getQuestionById(id);
         questionMapper.updateEntityFromRequest(question,request);
 
         questionRepository.save(question);
 
-        return questionMapper.toResponse(question);
+        return  question;
 
-    }
-
-    public List<Question> getQuestionsBySubject(SchoolSubject subject){
-        return questionRepository.findAllBySchoolSubject(subject);
     }
 }

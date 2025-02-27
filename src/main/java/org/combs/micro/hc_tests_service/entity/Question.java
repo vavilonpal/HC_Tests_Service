@@ -3,6 +3,7 @@ package org.combs.micro.hc_tests_service.entity;
 
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
+import org.combs.micro.hc_tests_service.enums.QuestionCheckType;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -29,6 +30,10 @@ public class Question {
     @Column(name = "teacher_id", nullable = false)
     private Long teacherId;
 
+    @OneToOne
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
+
     @ManyToOne
     @JoinColumn(name = "school_subj_id")
     private SchoolSubject schoolSubject;
@@ -36,8 +41,9 @@ public class Question {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "answer", nullable = false, columnDefinition = "TEXT")
-    private String answer;
+    @Column(name = "check_type")
+    @Enumerated(EnumType.STRING)
+    private QuestionCheckType checkType;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -52,4 +58,7 @@ public class Question {
     @Column(name = "created_at", nullable = false, updatable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
 }

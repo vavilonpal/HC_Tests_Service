@@ -2,34 +2,55 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
+import org.combs.micro.hc_tests_service.exeptions.SchoolSubjectNotFoundException;
 import org.combs.micro.hc_tests_service.repository.SchoolSubjectRepository;
+import org.combs.micro.hc_tests_service.request.SchoolSubjectRequest;
+import org.combs.micro.hc_tests_service.response.SchoolSubjectResponse;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class SchoolSubjectService {
     private final SchoolSubjectRepository repository;
-    public Optional<SchoolSubject> getSubjectById(Long id){
-        return repository.findById(id);
+
+    public SchoolSubject getSubjectById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new SchoolSubjectNotFoundException("School subject by" + id + " not found"));
     }
-    public List<SchoolSubject> getAllSubjects(){
-        return repository.findAll();
-    }
-    public Optional<SchoolSubject> findByName(String name){
-        return  repository.findSchoolSubjectByName(name);
+    public SchoolSubject getSubjectByName(String subjectName) {
+        return repository.findSchoolSubjectByName(subjectName)
+                .orElseThrow(() -> new SchoolSubjectNotFoundException("School subject by" + subjectName + " not found"));
     }
 
-    public SchoolSubject saveSubject(SchoolSubject subject) {
+    public List<SchoolSubject> getAllSubjects() {
+        return repository.findAll();
+    }
+
+    public SchoolSubject createSubject(SchoolSubjectRequest request) {
+
+        if (repository.existsByName(request.getName())) {
+            throw new SchoolSubjectNotFoundException("School with name " + request.getName() + " already exists");
+        }
+
+        SchoolSubject subject = SchoolSubject.builder().name(request.getName()).build();
+
         repository.save(subject);
+
         return subject;
     }
 
-    public SchoolSubject getSubjectByName(String subjectName) {
-        return repository.findSchoolSubjectByName(subjectName)
-                .orElseThrow(()->new EntityNotFoundException(String.format("School subject with name: %s not found", subjectName)));
+    public SchoolSubject updateSubject(Long id, SchoolSubjectRequest request) {
+        SchoolSubject subject = getSubjectById(id);
+        subject.setName(request.getName());
+
+        if (repository.existsByName(subject.getName())) {
+            throw new SchoolSubjectNotFoundException("School with name " + request.getName() + " already exists");
+        }
+
+        repository.save(subject);
+        return subject;
     }
 }

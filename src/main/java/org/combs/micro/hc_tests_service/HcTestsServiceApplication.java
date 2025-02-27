@@ -7,7 +7,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 
 @SpringBootApplication
-@EnableEurekaClient
+//@EnableEurekaClient
 //@EnableWebSecurity
 public class HcTestsServiceApplication {
 

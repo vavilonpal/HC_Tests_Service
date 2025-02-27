@@ -11,7 +11,6 @@ public class QuestionMapper {
     public void updateEntityFromRequest(Question question,QuestionRequest request){
         question.setSchoolSubject(request.getSchoolSubject());
         question.setDescription(request.getDescription());
-        question.setAnswer(request.getAnswer());
         question.setType(request.getType());
         question.setDifficulty(request.getDifficulty());
     }
@@ -21,7 +20,6 @@ public class QuestionMapper {
                 .teacherId(request.getTeacherId())
                 .schoolSubject(request.getSchoolSubject())
                 .description(request.getDescription())
-                .answer(request.getAnswer())
                 .type(request.getType())
                 .difficulty(request.getDifficulty())
                 .rankPoints(request.getRankPoints())
@@ -34,7 +32,6 @@ public class QuestionMapper {
                 .teacherId(question.getTeacherId())
                 .schoolSubject(question.getSchoolSubject())
                 .description(question.getDescription())
-                .answer(question.getAnswer())
                 .type(question.getType())
                 .difficultly(question.getDifficulty())
                 .rankPoints(question.getRankPoints())

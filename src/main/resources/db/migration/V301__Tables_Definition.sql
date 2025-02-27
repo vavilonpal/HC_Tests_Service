@@ -8,33 +8,34 @@ CREATE TABLE hc_school_tests_sc.school_subjects (
 CREATE TABLE if not exists hc_school_tests_sc.questions
 (
     id             SERIAL PRIMARY KEY,
-    school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
     teacher_id     bigint not null,
+    answer_id     bigint not null ,
+    school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
     description    TEXT         NOT NULL,
-    answer_type    varchar(55)  NOT NULL,
-    answer         TEXT         ,
+    check_type        BOOLEAN      NOT NULL,
     type           VARCHAR(50)  NOT NULL,                       -- Тип вопроса (например, "single_choice", "multiple_choice", "text")
     difficulty     SMALLINT CHECK (difficulty BETWEEN 1 AND 5), -- Сложность (1-легкий, 5-сложный)
     test_points SMALLINT DEFAULT 1 CHECK (hc_school_tests_sc.questions.test_points > 0), -- Баллы за правильный ответ
     rank_points int,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP          -- Дата создания
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,         -- Дата создания
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE if not exists hc_school_tests_sc.school_tests
 (
-    id             SERIAL PRIMARY KEY,                          -- Уникальный идентификатор теста
-    title          VARCHAR(255) NOT NULL,                       -- Название теста
+    id             SERIAL PRIMARY KEY,
+    title          VARCHAR(255) NOT NULL,
     teacher_id     BIGINT       NOT NULL,
-    type           VARCHAR(50) NOT NULL,                       -- тип теста
+    type           VARCHAR(50) NOT NULL,
     school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),                       -- Предмет
-    complexity     VARCHAR(50), -- Средняя сложность теста
-    class_level    INT,                       -- Класс/уровень
-    description    TEXT,                                        -- Описание теста
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,         -- Дата создания
-    duration       SMALLINT                                     -- Время прохождения в минутах
+    complexity     VARCHAR(50),
+    class_level    INT,
+    description    TEXT,
+    duration       SMALLINT,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
-
-
 
 CREATE TABLE if not exists hc_school_tests_sc.results
 (
@@ -47,13 +48,16 @@ CREATE TABLE if not exists hc_school_tests_sc.results
     finished_at TIMESTAMP                                                  -- Время завершения теста
 );
 
+
 CREATE TABLE IF NOT EXISTS hc_school_tests_sc.answers
 (
     id serial primary key,
-    result_id bigint references hc_school_tests_sc.results(id),
+    --result_id bigint references hc_school_tests_sc.results(id),
     question_id bigint not null  references hc_school_tests_sc.questions(id),
     student_answer text,
     score_points int
-)
+);
+
+
 
 
