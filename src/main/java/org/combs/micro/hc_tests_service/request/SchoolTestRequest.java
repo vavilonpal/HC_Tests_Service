@@ -15,7 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -23,7 +25,6 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class SchoolTestRequest {
-
     @NotNull(message = "Fill this field")
     private String title;
 
@@ -31,13 +32,13 @@ public class SchoolTestRequest {
     private Long teacherId;
 
     @NotNull(message = "Set test type")
-    private TestType type;
+    private String testType;
 
     @NotNull(message = "Select a school subject of this test")
-    private SchoolSubject schoolSubject;
+    private String schoolSubjectName;
 
     @NotNull(message = "Set complexity")
-    private Complexity complexity;
+    private String testComplexity;
 
     @NotNull(message = "Set a class level of the test")
     @Size(min = 1, max =  12, message = "Size must has value between 1 and 12")
@@ -45,13 +46,11 @@ public class SchoolTestRequest {
 
     @Max(value = 255, message = " Too long description")
     private String description;
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Max(value = 90, message = "Test duration has been max 90 minutes length")
     private Integer duration;
     @Builder.Default
-    private List<Question> questions = new ArrayList<>();
+    private Set<QuestionRequest> questionRequests = new HashSet<>();
 
 
 }

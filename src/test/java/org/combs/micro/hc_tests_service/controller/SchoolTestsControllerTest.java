@@ -7,7 +7,7 @@ import org.combs.micro.hc_tests_service.entity.SchoolTest;
 import org.combs.micro.hc_tests_service.enums.Complexity;
 import org.combs.micro.hc_tests_service.enums.TestType;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
-import org.combs.micro.hc_tests_service.response.SchoolTestResponse;
+import org.combs.micro.hc_tests_service.response.SchoolTestInfoResponse;
 import org.combs.micro.hc_tests_service.mapper.SchoolTestMapper;
 import org.combs.micro.hc_tests_service.service.SchoolTestService;
 import org.junit.jupiter.api.Test;
@@ -42,8 +42,8 @@ public class SchoolTestsControllerTest {
 
     @Test
     void getAllTests_ShouldReturn200_WhenTestsExist() throws Exception {
-        List<SchoolTestResponse> testResponses = List.of(SchoolTestResponse.builder().id(1L).title("Test response").build());
-        Page<SchoolTestResponse> pageResponse = new PageImpl<>(testResponses);
+        List<SchoolTestInfoResponse> testResponses = List.of(SchoolTestInfoResponse.builder().id(1L).title("Test response").build());
+        Page<SchoolTestInfoResponse> pageResponse = new PageImpl<>(testResponses);
 
         when(schoolTestService.getAllPageableTests(any(), any(), any(), any(), any())).thenReturn(pageResponse);
 
@@ -69,8 +69,8 @@ public class SchoolTestsControllerTest {
 
     @Test
     void getAllTests_ShouldReturn200_WhenNoFiltersPassed() throws Exception {
-        List<SchoolTestResponse> testResponses = List.of(SchoolTestResponse.builder().id(1L).title("Test response").build());
-        Page<SchoolTestResponse> pageResponse = new PageImpl<>(testResponses);
+        List<SchoolTestInfoResponse> testResponses = List.of(SchoolTestInfoResponse.builder().id(1L).title("Test response").build());
+        Page<SchoolTestInfoResponse> pageResponse = new PageImpl<>(testResponses);
 
         when(schoolTestService.getAllPageableTests(any(), any(), any(), any(), any()))
                 .thenReturn(pageResponse);
@@ -86,8 +86,8 @@ public class SchoolTestsControllerTest {
 
         when(schoolTestService.getTestById(1L))
                 .thenReturn(test);
-        when(schoolTestMapper.toResponse(test))
-                .thenReturn(SchoolTestResponse.builder().id(test.getId()).title(test.getTitle()).build());
+        when(schoolTestMapper.toInfoResponse(test))
+                .thenReturn(SchoolTestInfoResponse.builder().id(test.getId()).title(test.getTitle()).build());
 
         mockMvc.perform(get("/api/v1/tests/1")
                 .accept(MediaType.APPLICATION_JSON))

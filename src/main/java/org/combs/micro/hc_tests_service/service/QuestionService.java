@@ -38,8 +38,8 @@ public class QuestionService {
                 .orElseThrow(()-> new EntityNotFoundException("Question not found"));
     }
 
-    public void createQuestion(Question question) {
-        questionRepository.save(question);
+public Question createQuestion(Question question) {
+        return questionRepository.save(question);
     }
 
     public Question updateQuestion(Long id, QuestionRequest request) {

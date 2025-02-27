@@ -39,7 +39,7 @@ public class SchoolTest {
     private TestType type;
 
     @ManyToOne
-    @JoinColumn(name = "school_subject_id")
+    @JoinColumn(name = "school_subj_id")
     private SchoolSubject schoolSubject;
 
     @Column(name = "complexity")

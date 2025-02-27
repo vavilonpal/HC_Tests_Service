@@ -5,22 +5,6 @@ CREATE TABLE hc_school_tests_sc.school_subjects (
                                  name VARCHAR(255) NOT NULL unique 
 );
 
-CREATE TABLE if not exists hc_school_tests_sc.questions
-(
-    id             SERIAL PRIMARY KEY,
-    teacher_id     bigint not null,
-    answer_id     bigint not null ,
-    school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
-    description    TEXT         NOT NULL,
-    check_type        BOOLEAN      NOT NULL,
-    type           VARCHAR(50)  NOT NULL,                       -- Тип вопроса (например, "single_choice", "multiple_choice", "text")
-    difficulty     SMALLINT CHECK (difficulty BETWEEN 1 AND 5), -- Сложность (1-легкий, 5-сложный)
-    test_points SMALLINT DEFAULT 1 CHECK (hc_school_tests_sc.questions.test_points > 0), -- Баллы за правильный ответ
-    rank_points int,
-    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,         -- Дата создания
-    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE if not exists hc_school_tests_sc.school_tests
 (
     id             SERIAL PRIMARY KEY,
@@ -35,6 +19,22 @@ CREATE TABLE if not exists hc_school_tests_sc.school_tests
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
+);
+CREATE TABLE if not exists hc_school_tests_sc.questions
+(
+    id             SERIAL PRIMARY KEY,
+    teacher_id     bigint not null,
+    answer_id     bigint not null ,
+    test_id       bigint not null ,
+    school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
+    description    TEXT         NOT NULL,
+    check_type        BOOLEAN      NOT NULL,
+    type           VARCHAR(50)  NOT NULL,                       -- Тип вопроса (например, "single_choice", "multiple_choice", "text")
+    difficulty     SMALLINT CHECK (difficulty BETWEEN 1 AND 5), -- Сложность (1-легкий, 5-сложный)
+    test_points SMALLINT DEFAULT 1 CHECK (hc_school_tests_sc.questions.test_points > 0), -- Баллы за правильный ответ
+    rank_points int,
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,         -- Дата создания
+    updated_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE if not exists hc_school_tests_sc.results

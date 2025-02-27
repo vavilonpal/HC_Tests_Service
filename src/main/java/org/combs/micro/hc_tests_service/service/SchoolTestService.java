@@ -1,19 +1,13 @@
 package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
-import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
 import org.combs.micro.hc_tests_service.exeptions.SchoolSubjectNotFoundException;
 import org.combs.micro.hc_tests_service.mapper.SchoolTestMapper;
 import org.combs.micro.hc_tests_service.repository.TestRepository;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
-import org.combs.micro.hc_tests_service.response.SchoolTestResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -33,9 +27,9 @@ public class SchoolTestService {
         return testRepository.findAllByFilters(pageable, subject, complexity, classLevel, teacherId);
     }*/
 
-    public void createTest(SchoolTestRequest schoolTestRequest) {
-        SchoolTest test = schoolTestMapper.toEntity(schoolTestRequest);
-        testRepository.save(test);
+    public SchoolTest createTest(SchoolTestRequest schoolTestRequest) {
+        SchoolTest test = schoolTestMapper.toCreateEntity(schoolTestRequest);
+        return testRepository.save(test);
     }
 
     public SchoolTest updateTest(Long testId, SchoolTestRequest schoolTestRequest) {
