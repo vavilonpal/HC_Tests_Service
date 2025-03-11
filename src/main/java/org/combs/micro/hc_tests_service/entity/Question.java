@@ -30,20 +30,24 @@ public class Question {
     @Column(name = "teacher_id", nullable = false)
     private Long teacherId;
 
-    @OneToOne
-    @JoinColumn(name = "answer_id")
-    private Answer answer;
+
+    @ManyToOne()
+    @JoinColumn(name = "test_id", nullable = false)
+    private SchoolTest test;
+
+    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "answer")
+    private String answer;
 
     @ManyToOne
     @JoinColumn(name = "school_subj_id")
     private SchoolSubject schoolSubject;
 
-    @Column(name = "description", nullable = false, columnDefinition = "TEXT")
-    private String description;
 
     @Column(name = "check_type")
-    @Enumerated(EnumType.STRING)
-    private QuestionCheckType checkType;
+    private Boolean checkType;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)

@@ -6,8 +6,7 @@ import lombok.Data;
 import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
-import org.combs.micro.hc_tests_service.enums.Complexity;
-import org.combs.micro.hc_tests_service.enums.TestType;
+import org.combs.micro.hc_tests_service.request.QuestionRequest;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
 import org.combs.micro.hc_tests_service.response.QuestionResponse;
 import org.combs.micro.hc_tests_service.response.SchoolTestInfoResponse;
@@ -29,14 +28,12 @@ public class SchoolTestMapper {
     private final QuestionMapper questionMapper;
 
     public SchoolTest toCreateEntity(SchoolTestRequest request) {
-        TestType testType = TestType.valueOf(request.getTestType().toUpperCase());
-        Complexity complexity = Complexity.valueOf(request.getTestComplexity().toUpperCase());
         SchoolSubject schoolSubject = subjectService.getSubjectByName(request.getSchoolSubjectName());
         Set<Question> questionsOfTest = new HashSet<>();
 
-        if ((!request.getQuestionRequests().isEmpty())) {
+        if (!(request.getQuestionRequests().isEmpty())) {
             questionsOfTest = request.getQuestionRequests().stream()
-                    .map(questionMapper::toEntity)
+                    .map(questionMapper::toCreateEntity)
                     .map(questionService::createQuestion)
                     .collect(Collectors.toSet());
         }
@@ -44,9 +41,9 @@ public class SchoolTestMapper {
         return SchoolTest.builder()
                 .title(request.getTitle())
                 .teacherId(request.getTeacherId())
-                .type(testType)
+                .type(request.getTestType())
                 .schoolSubject(schoolSubject)
-                .complexity(complexity)
+                .complexity(request.getTestComplexity())
                 .classLevel(request.getClassLevel())
                 .description(request.getDescription())
                 .duration(request.getDuration())
@@ -54,32 +51,37 @@ public class SchoolTestMapper {
                 .build();
     }
 
-    // todo протестить будут ли сохрантнься вопросы
-    public SchoolTest toUpdateEntity(SchoolTest test, SchoolTestRequest request) {
-        TestType testType = TestType.valueOf(request.getTestType().toUpperCase());
-        Complexity complexity = Complexity.valueOf(request.getTestComplexity().toUpperCase());
 
-
+    // todo check this method
+    public SchoolTest toUpdateEntity(SchoolTestRequest request, SchoolTest test) {
         if (!(request.getSchoolSubjectName().isEmpty())) {
             SchoolSubject subject = subjectService.getSubjectByName(request.getSchoolSubjectName());
             test.setSchoolSubject(subject);
         }
-        if ((!request.getQuestionRequests().isEmpty())) {
-            Set<Question> questionsOfTest = request.getQuestionRequests().stream()
-                    .map(questionMapper::toEntity)
-                    .map(questionService::createQuestion)
+
+        if (!request.getQuestionRequests().isEmpty()) {
+
+            // Создаём новые вопросы и устанавливаем им тест
+            Set<Question> newQuestions = request.getQuestionRequests().stream()
+                    .map(requestQuestion -> {
+                        Question question = questionMapper.toCreateEntity(requestQuestion);
+                        question.setTest(test);// 🚀 Обязательно устанавливаем тест
+                        return question;
+                    })
                     .collect(Collectors.toSet());
-            test.setQuestions(questionsOfTest);
+
+            test.getQuestions().addAll(newQuestions);
         }
+
         test.setTitle(request.getTitle());
         test.setTeacherId(request.getTeacherId());
-        test.setType(testType);
-        test.setComplexity(complexity);
+        test.setType(request.getTestType());
+        test.setComplexity(request.getTestComplexity());
         test.setClassLevel(request.getClassLevel());
         test.setDescription(request.getDescription());
         test.setDuration(request.getDuration());
 
-        return null;
+        return test;
     }
 
     /**
@@ -90,7 +92,8 @@ public class SchoolTestMapper {
         return SchoolTestInfoResponse.builder()
                 .title(test.getTitle())
                 .teacherId(test.getTeacherId())
-                .type(test.getType().toString())
+                .type(test.getType())
+                .complexity(test.getComplexity())
                 .schoolSubjectName(test.getSchoolSubject()
                         .getName())
                 .description(test.getDescription())
@@ -115,11 +118,5 @@ public class SchoolTestMapper {
                 .duration(test.getDuration())
                 .build();
     }
-
-    public void updateEntityFromRequest(SchoolTestRequest request, SchoolTest test) {
-
-
-    }
-
 
 }

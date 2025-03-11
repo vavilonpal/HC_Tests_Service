@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -38,27 +39,19 @@ public class SchoolTestsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTest(@RequestBody SchoolTestRequest request, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
-        }
-
-        SchoolTestInfoResponse response = testMapper.toInfoResponse(
-                schoolTestService.createTest(request));
+    public ResponseEntity<?> createTest(@RequestBody @Valid SchoolTestRequest request) {
+        SchoolTest test = schoolTestService.createTest(request);
+        SchoolTestInfoResponse response = testMapper.toInfoResponse(test);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTest(@PathVariable Long id,
-                                        @RequestBody SchoolTestRequest request,
-                                        BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
-        }
+                                        @RequestBody @Valid SchoolTestRequest request){
+        SchoolTest updatedTest = schoolTestService.updateTest(id,request);
+        SchoolTestInfoResponse response = testMapper.toInfoResponse(updatedTest);
 
-        SchoolTestInfoResponse response = testMapper.toInfoResponse(schoolTestService.updateTest(id,request));
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/{id}")

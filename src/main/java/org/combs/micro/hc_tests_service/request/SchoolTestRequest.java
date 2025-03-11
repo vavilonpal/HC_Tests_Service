@@ -32,19 +32,18 @@ public class SchoolTestRequest {
     private Long teacherId;
 
     @NotNull(message = "Set test type")
-    private String testType;
+    private TestType testType;
 
     @NotNull(message = "Select a school subject of this test")
     private String schoolSubjectName;
 
     @NotNull(message = "Set complexity")
-    private String testComplexity;
+    private Complexity testComplexity;
 
     @NotNull(message = "Set a class level of the test")
-    @Size(min = 1, max =  12, message = "Size must has value between 1 and 12")
     private Integer classLevel;
 
-    @Max(value = 255, message = " Too long description")
+    @Size(max = 255, message = "Too long description")
     private String description;
 
     @Max(value = 90, message = "Test duration has been max 90 minutes length")

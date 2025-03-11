@@ -24,18 +24,18 @@ VALUES
     ('Music Theory', 10, 'TRAINING', 10, 'MEDIUM', 8, 'Basics of musical notation', 45);
 
 
-INSERT INTO hc_school_tests_sc.questions (teacher_id, answer_id,test_id, school_subj_id, description, check_type, type, difficulty, test_points, rank_points)
+INSERT INTO hc_school_tests_sc.questions (teacher_id, answer,test_id, school_subj_id, description, check_type, type, difficulty, test_points, rank_points)
 VALUES
-    (1, 1,1, 1, 'What is 2+2?', true, 'single_choice', 1, 1, 10),
-    (2, 2,1, 2, 'What is Newton’s First Law?', true, 'text', 3, 2, 20),
-    (3, 3,2, 3, 'What is the chemical formula of water?', true, 'single_choice', 1, 1, 10),
-    (4, 4,2, 4, 'What is the main function of the liver?', false, 'multiple_choice', 2, 2, 15),
-    (5, 5,3, 5, 'Who was the first President of the USA?', true, 'single_choice', 2, 2, 15),
-    (6, 6,3, 6, 'What is the capital of France?', true, 'single_choice', 1, 1, 10),
-    (7, 7,4, 7, 'Define past perfect tense.', true, 'text', 3, 3, 20),
-    (8, 8,4, 8, 'What does HTML stand for?', true, 'text', 2, 2, 15),
-    (9, 9,5, 9, 'Who painted the Mona Lisa?', true, 'single_choice', 2, 2, 15),
-    (10, 10,6, 10, 'What is the key signature of C Major?', true, 'single_choice', 3, 3, 20);
+    (1, 'answer',1, 1, 'What is 2+2?', true, 'single_choice', 1, 1, 10),
+    (2, 'answer',1, 2, 'What is Newton’s First Law?', true, 'text', 3, 2, 20),
+    (3, 'answer',2, 3, 'What is the chemical formula of water?', true, 'single_choice', 1, 1, 10),
+    (4, 'answer',2, 4, 'What is the main function of the liver?', false, 'multiple_choice', 2, 2, 15),
+    (5, 'answer',3, 5, 'Who was the first President of the USA?', true, 'single_choice', 2, 2, 15),
+    (6, 'answer',3, 6, 'What is the capital of France?', true, 'single_choice', 1, 1, 10),
+    (7, 'answer',4, 7, 'Define past perfect tense.', true, 'text', 3, 3, 20),
+    (8, 'answer',4, 8, 'What does HTML stand for?', true, 'text', 2, 2, 15),
+    (9, 'answer',5, 9, 'Who painted the Mona Lisa?', true, 'single_choice', 2, 2, 15),
+    (10, 'answer',6, 10, 'What is the key signature of C Major?', true, 'single_choice', 3, 3, 20);
 
 INSERT INTO hc_school_tests_sc.results (test_id, student_id, score, rank_score)
 VALUES

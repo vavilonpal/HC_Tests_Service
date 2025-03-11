@@ -35,20 +35,22 @@ public class QuestionService {
 
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Question not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-public Question createQuestion(Question question) {
+    public Question createQuestion(Question question) {
+
+
         return questionRepository.save(question);
     }
 
     public Question updateQuestion(Long id, QuestionRequest request) {
         Question question = getQuestionById(id);
-        questionMapper.updateEntityFromRequest(question,request);
+        questionMapper.updateEntityFromRequest(question, request);
 
         questionRepository.save(question);
 
-        return  question;
+        return question;
 
     }
 }

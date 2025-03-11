@@ -24,7 +24,7 @@ CREATE TABLE if not exists hc_school_tests_sc.questions
 (
     id             SERIAL PRIMARY KEY,
     teacher_id     bigint not null,
-    answer_id     bigint not null ,
+    answer        text,
     test_id       bigint not null ,
     school_subj_id bigint NOT NULL references hc_school_tests_sc.school_subjects(id),
     description    TEXT         NOT NULL,

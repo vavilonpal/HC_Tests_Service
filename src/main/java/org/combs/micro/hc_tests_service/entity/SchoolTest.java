@@ -55,8 +55,7 @@ public class SchoolTest {
     @Column(name = "duration")
     private Integer duration;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name = "test_id")
+    @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Question> questions = new HashSet<>();
 
     @Column(name = "created_at", nullable = false)
