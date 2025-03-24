@@ -20,9 +20,11 @@ public class QuestionMapper {
         }
 
         question.setDescription(request.getDescription());
+        question.setAnswer(request.getAnswer());
         question.setType(request.getType());
         question.setCheckType(request.getCheckType());
         question.setDifficulty(request.getDifficulty());
+        question.setRankPoints(request.getRankPoints());
     }
 
     public Question toCreateEntity(QuestionRequest request){
@@ -47,6 +49,7 @@ public class QuestionMapper {
                 .schoolSubjectName(question.getSchoolSubject()
                         .getName())
                 .description(question.getDescription())
+                .answer(question.getAnswer())
                 .type(question.getType())
                 .difficultly(question.getDifficulty())
                 .rankPoints(question.getRankPoints())

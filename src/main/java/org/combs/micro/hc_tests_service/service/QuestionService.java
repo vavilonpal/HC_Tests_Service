@@ -33,19 +33,22 @@ public class QuestionService {
 
     public Question createQuestion(QuestionRequest request) {
         /*
-        * todo
-        *  wath how to  open session for creating question
-        *  and take ability to save question with current test id
-        * */
+         * todo
+         *  wath how to  open session for creating question
+         *  and take ability to save question with current test id
+         * */
         Question question = questionMapper.toCreateEntity(request);
         return questionRepository.save(question);
     }
+
     private void checkQuestionExistsInTestByDescription(Long testId, String questionDescription) {
-        if(questionRepository.existsByDescriptionAndTestId(questionDescription, testId)){
+        if (questionRepository.existsByDescriptionAndTestId(questionDescription, testId)) {
             throw new QuestionByThisDescriptionExistsInThisTest("Question by this description already exists");
-        };
+        }
+        ;
     }
-    public QuestionResponse addQuestionToTest(Long testId, QuestionRequest questionRequest){
+
+    public QuestionResponse addQuestionToTest(Long testId, QuestionRequest questionRequest) {
         SchoolTest test = testService.getTestById(testId);
         Question question = questionMapper.toCreateEntity(questionRequest);
 
@@ -55,13 +58,20 @@ public class QuestionService {
 
         return questionMapper.toResponse(questionRepository.save(question));
     }
-    public Question updateQuestion(Long id, QuestionRequest request) {
+
+    public QuestionResponse updateQuestionInTest(Long id, Long testId, QuestionRequest request) {
+        // todo check if test consist this qquesiton
         Question question = getQuestionById(id);
+
+        // Если описание запроса и вопроса из бд отличается,
+        // проверяем нет ли такого же описания  у других вопросов теста
+        if (!(request.getDescription().equals(question.getDescription()))) {
+            checkQuestionExistsInTestByDescription(testId, question.getDescription());
+        }
+
         questionMapper.updateEntityFromRequest(question, request);
 
-        questionRepository.save(question);
-
-        return question;
+        return questionMapper.toResponse(questionRepository.save(question));
 
     }
 }
