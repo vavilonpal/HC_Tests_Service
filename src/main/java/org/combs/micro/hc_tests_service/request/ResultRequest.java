@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ResultRequest {
 
-
     private Long studentId;
     private Integer score;
     private Integer rankScore;

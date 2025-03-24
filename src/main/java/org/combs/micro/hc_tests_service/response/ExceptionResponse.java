@@ -9,14 +9,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ExceptionResponse {
 
     private String message;
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public ExceptionResponse(String message) {
         this.message = message;

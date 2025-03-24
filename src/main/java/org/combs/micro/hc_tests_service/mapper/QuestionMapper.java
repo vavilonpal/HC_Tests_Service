@@ -26,27 +26,26 @@ public class QuestionMapper {
     }
 
     public Question toCreateEntity(QuestionRequest request){
+        SchoolSubject schoolSubject = subjectService.getSubjectByName(request.getSchoolSubjectName());
+
         Question question = Question.builder()
                 .teacherId(request.getTeacherId())
                 .description(request.getDescription())
+                .schoolSubject(schoolSubject)
                 .answer(request.getAnswer())
                 .type(request.getType())
                 .checkType(request.getCheckType())
                 .difficulty(request.getDifficulty())
                 .rankPoints(request.getRankPoints())
-                .createdAt(request.getCreatedAt())
                 .build();
-        if (!(request.getSchoolSubjectName().isEmpty())){
-            SchoolSubject subject = subjectService.getSubjectByName(request.getSchoolSubjectName());
-            question.setSchoolSubject(subject);
-        }
         return question;
     }
     public QuestionResponse toResponse(Question question){
         return QuestionResponse.builder()
                 .id(question.getId())
                 .teacherId(question.getTeacherId())
-                .schoolSubject(question.getSchoolSubject())
+                .schoolSubjectName(question.getSchoolSubject()
+                        .getName())
                 .description(question.getDescription())
                 .type(question.getType())
                 .difficultly(question.getDifficulty())

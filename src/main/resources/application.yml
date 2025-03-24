@@ -3,12 +3,20 @@ server:
 
 spring:
 
+
   #Data config
   datasource:
     url: jdbc:postgresql://localhost:5434/postgres
     username: user
     password: user
 
+#  cache:
+#    redis:
+#      time-to-live: 1m
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password: redis
 
   #JPA config
   jpa:

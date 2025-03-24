@@ -24,19 +24,12 @@ import java.util.stream.Collectors;
 @Component
 public class SchoolTestMapper {
     private final SchoolSubjectService subjectService;
-    private final QuestionService questionService;
     private final QuestionMapper questionMapper;
 
     public SchoolTest toCreateEntity(SchoolTestRequest request) {
+        // Маппинг сущности школьного предмета
         SchoolSubject schoolSubject = subjectService.getSubjectByName(request.getSchoolSubjectName());
-        Set<Question> questionsOfTest = new HashSet<>();
-
-        if (!(request.getQuestionRequests().isEmpty())) {
-            questionsOfTest = request.getQuestionRequests().stream()
-                    .map(questionMapper::toCreateEntity)
-                    .map(questionService::createQuestion)
-                    .collect(Collectors.toSet());
-        }
+        SchoolTest schoolTest = new SchoolTest();
 
         return SchoolTest.builder()
                 .title(request.getTitle())
@@ -47,30 +40,19 @@ public class SchoolTestMapper {
                 .classLevel(request.getClassLevel())
                 .description(request.getDescription())
                 .duration(request.getDuration())
-                .questions(questionsOfTest)
                 .build();
     }
 
 
-    // todo check this method
+    /**
+     * Метод служит дял обноовления существующего теста
+     */
+
     public SchoolTest toUpdateEntity(SchoolTestRequest request, SchoolTest test) {
+
         if (!(request.getSchoolSubjectName().isEmpty())) {
             SchoolSubject subject = subjectService.getSubjectByName(request.getSchoolSubjectName());
             test.setSchoolSubject(subject);
-        }
-
-        if (!request.getQuestionRequests().isEmpty()) {
-
-            // Создаём новые вопросы и устанавливаем им тест
-            Set<Question> newQuestions = request.getQuestionRequests().stream()
-                    .map(requestQuestion -> {
-                        Question question = questionMapper.toCreateEntity(requestQuestion);
-                        question.setTest(test);// 🚀 Обязательно устанавливаем тест
-                        return question;
-                    })
-                    .collect(Collectors.toSet());
-
-            test.getQuestions().addAll(newQuestions);
         }
 
         test.setTitle(request.getTitle());

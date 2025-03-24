@@ -30,9 +30,8 @@ public class Question {
     @Column(name = "teacher_id", nullable = false)
     private Long teacherId;
 
-
     @ManyToOne()
-    @JoinColumn(name = "test_id", nullable = false)
+    @JoinColumn(name = "test_id")
     private SchoolTest test;
 
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
@@ -60,9 +59,19 @@ public class Question {
     private Integer rankPoints;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void onPersist(){
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void  onUpdate(){
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }

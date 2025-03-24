@@ -48,8 +48,4 @@ public class SchoolTestRequest {
 
     @Max(value = 90, message = "Test duration has been max 90 minutes length")
     private Integer duration;
-    @Builder.Default
-    private Set<QuestionRequest> questionRequests = new HashSet<>();
-
-
 }

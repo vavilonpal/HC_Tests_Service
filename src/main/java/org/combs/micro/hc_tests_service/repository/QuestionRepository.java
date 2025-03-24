@@ -15,17 +15,7 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-    List<Question> findAllBySchoolSubject(SchoolSubject subject);
 
-   /* @Query("SELECT q FROM Question q " +
-            "WHERE (:type IS NULL OR q.type = :type) " +
-            "AND (:rank_points IS NULL OR q.rankPoints = :rank_points) " +
-            "AND (:difficulty IS NULL OR q.difficulty = :difficulty) " +
-            "AND (:subject IS NULL OR q.schoolSubject = :subject)")
-    Page<Question> findAllByFilters(Pageable pageable,
-                                    @Param("type") QuestionType type,
-                                    @Param("rank_points") Integer rankPoints,
-                                    @Param("difficultly") Integer difficulty,
-                                    @Param("subject") SchoolSubject subject
-    );*/
+    Boolean existsByDescriptionAndTestId(String description, Long testId);
+
 }

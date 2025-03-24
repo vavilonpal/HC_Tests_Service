@@ -24,24 +24,32 @@ public class SchoolTestService {
     public SchoolTest getTestById(Long id) {
         return testRepository.findById(id).orElseThrow(() -> new SchoolSubjectNotFoundException("Test not found"));
     }
+
     public List<SchoolTest> getAllTests() {
         return testRepository.findAll();
     }
 
-    private void checkTeacherExist(Long teacherId){
+    private void checkTeacherExist(Long teacherId) {
+        if (teacherId == null) {
+            throw new TeacherNotFoundException("ID учителя равно null ");
+        }
         boolean teacherExists = teacherServiceClient.existById(teacherId);
-        if (!teacherExists) {
+
+        if (!teacherExists){
             throw new TeacherNotFoundException("Учитель с ID " + teacherId + " не найден");
+
         }
     }
+
     public SchoolTest createTest(SchoolTestRequest schoolTestRequest) {
-        checkTeacherExist(schoolTestRequest.getTeacherId());
+        //checkTeacherExist(schoolTestRequest.getTeacherId());
 
         SchoolTest test = schoolTestMapper.toCreateEntity(schoolTestRequest);
         return testRepository.save(test);
     }
+
     public SchoolTest updateTest(Long testId, SchoolTestRequest schoolTestRequest) {
-        checkTeacherExist(schoolTestRequest.getTeacherId());
+        //checkTeacherExist(schoolTestRequest.getTeacherId());
 
         SchoolTest test = getTestById(testId);
         schoolTestMapper.toUpdateEntity(schoolTestRequest, test);

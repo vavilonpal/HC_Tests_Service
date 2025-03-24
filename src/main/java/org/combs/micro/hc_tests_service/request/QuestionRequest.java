@@ -20,23 +20,24 @@ import java.time.LocalDateTime;
 public class QuestionRequest {
 
     private Long teacherId;
+
     @NotNull(message = "Set subject of question")
     private String schoolSubjectName;
+
     @Size(min = 10,max = 255, message = "Write description of question")
     private String description;
+
     @NotNull(message = "Set answer for question")
     private String answer;
+
     @NotNull(message = "Set type of question")
     private QuestionType type;
 
     @NotNull(message = "Set  check type of question")
     private Boolean checkType;
+
     @NotNull(message = "Set value of difficultly")
     private Integer difficulty;
 
     private Integer rankPoints;
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-
 }

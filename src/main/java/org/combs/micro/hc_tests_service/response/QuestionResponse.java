@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class QuestionResponse {
     private Long id;
     private Long teacherId;
-    private SchoolSubject schoolSubject;
+    private String schoolSubjectName;
     private String description;
     private String answer;
     private QuestionType type;

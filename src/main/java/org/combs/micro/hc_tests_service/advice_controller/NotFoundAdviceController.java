@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class DefaultAdvice {
+public class NotFoundAdviceController {
 
     @ExceptionHandler(SchoolTestNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleSchoolNotFoundException(SchoolTestNotFoundException exception){
