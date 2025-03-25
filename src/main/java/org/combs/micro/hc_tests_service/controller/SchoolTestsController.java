@@ -52,23 +52,6 @@ public class SchoolTestsController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(response);
     }
-    @PostMapping("/{testId}/questions")
-    public ResponseEntity<QuestionResponse> addQuestionToTest(@PathVariable Long testId,
-                                                              @RequestBody QuestionRequest questionRequest){
-        QuestionResponse response = questionService.addQuestionToTest(testId, questionRequest);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(response);
-    }
-    @PutMapping("/{testId}/questions/{questionId}")
-    public ResponseEntity<QuestionResponse> updateQuestionInTest(@PathVariable Long questionId,
-                                                                 @PathVariable Long testId,
-                                                              @RequestBody QuestionRequest questionRequest){
-        QuestionResponse response = questionService.updateQuestionInTest(questionId, testId,questionRequest);
-
-        return ResponseEntity.ok(response);
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<SchoolTestInfoResponse> updateTest(@PathVariable Long id,

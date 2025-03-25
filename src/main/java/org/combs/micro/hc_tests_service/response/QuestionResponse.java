@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class QuestionResponse {
     private Long id;
     private Long teacherId;
+    private Long testId;
     private String schoolSubjectName;
     private String description;
     private String answer;

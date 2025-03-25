@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-@ToString(exclude = "schoolSubject")
+@ToString(exclude = {"schoolSubject", "test"})
 @EqualsAndHashCode(of = {"schoolSubject", "description"})
 @NoArgsConstructor
 @AllArgsConstructor

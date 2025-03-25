@@ -12,10 +12,14 @@ import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Boolean existsByDescriptionAndTestId(String description, Long testId);
+    Optional<Question> getQuestionsByIdAndTestId(Long id, Long testId);
+
+    List<Question> getQuestionsByTestId(Long testId);
 
 }

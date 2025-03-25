@@ -46,6 +46,7 @@ public class QuestionMapper {
         return QuestionResponse.builder()
                 .id(question.getId())
                 .teacherId(question.getTeacherId())
+                .testId(question.getTest().getId())
                 .schoolSubjectName(question.getSchoolSubject()
                         .getName())
                 .description(question.getDescription())

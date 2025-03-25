@@ -5,6 +5,7 @@ import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
+import org.combs.micro.hc_tests_service.exeptions.QuestionNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.existsException.QuestionByThisDescriptionExistsInThisTest;
 import org.combs.micro.hc_tests_service.mapper.QuestionMapper;
 import org.combs.micro.hc_tests_service.repository.QuestionRepository;
@@ -26,20 +27,21 @@ public class QuestionService {
     private final QuestionMapper questionMapper;
 
 
+
+    public List<Question> getAllTestQuestions(Long testId){
+        return questionRepository.getQuestionsByTestId(testId);
+    }
+
     public Question getQuestionById(Long id) {
         return questionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-    public Question createQuestion(QuestionRequest request) {
-        /*
-         * todo
-         *  wath how to  open session for creating question
-         *  and take ability to save question with current test id
-         * */
-        Question question = questionMapper.toCreateEntity(request);
-        return questionRepository.save(question);
+    public Question getQuestionByIdAndTestId(Long id, Long testId) {
+        return questionRepository.getQuestionsByIdAndTestId(id, testId)
+                .orElseThrow(() -> new QuestionNotFoundException("Question by this id and test-id doesnt exists"));
     }
+
 
     private void checkQuestionExistsInTestByDescription(Long testId, String questionDescription) {
         if (questionRepository.existsByDescriptionAndTestId(questionDescription, testId)) {
@@ -48,7 +50,7 @@ public class QuestionService {
         ;
     }
 
-    public QuestionResponse addQuestionToTest(Long testId, QuestionRequest questionRequest) {
+    public Question addQuestionToTest(Long testId, QuestionRequest questionRequest) {
         SchoolTest test = testService.getTestById(testId);
         Question question = questionMapper.toCreateEntity(questionRequest);
 
@@ -56,22 +58,24 @@ public class QuestionService {
 
         question.setTest(test);
 
-        return questionMapper.toResponse(questionRepository.save(question));
+        return questionRepository.save(question);
     }
 
-    public QuestionResponse updateQuestionInTest(Long id, Long testId, QuestionRequest request) {
-        // todo check if test consist this qquesiton
-        Question question = getQuestionById(id);
+    public Question updateQuestionInTest(Long id, Long testId, QuestionRequest request) {
+        Question question = getQuestionByIdAndTestId(id, testId);
 
         // Если описание запроса и вопроса из бд отличается,
         // проверяем нет ли такого же описания  у других вопросов теста
         if (!(request.getDescription().equals(question.getDescription()))) {
-            checkQuestionExistsInTestByDescription(testId, question.getDescription());
+            checkQuestionExistsInTestByDescription(testId, request.getDescription());
         }
 
         questionMapper.updateEntityFromRequest(question, request);
 
-        return questionMapper.toResponse(questionRepository.save(question));
-
+        return questionRepository.save(question);
+    }
+    public void  deleteQuestion(Long id, Long testId){
+        Question question = getQuestionByIdAndTestId(id, testId);
+        questionRepository.delete(question);
     }
 }
