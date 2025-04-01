@@ -5,6 +5,7 @@ import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.request.QuestionRequest;
 import org.combs.micro.hc_tests_service.response.QuestionResponse;
+import org.combs.micro.hc_tests_service.response.SolveQuestionResponse;
 import org.combs.micro.hc_tests_service.service.SchoolSubjectService;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +21,18 @@ public class QuestionMapper {
         }
 
         question.setDescription(request.getDescription());
-        question.setAnswer(request.getAnswer());
+       // question.setAnswer(request.getAnswer());
         question.setType(request.getType());
         question.setCheckType(request.getCheckType());
         question.setDifficulty(request.getDifficulty());
         question.setRankPoints(request.getRankPoints());
+        question.setScorePoints(request.getTestPoints());
     }
 
     public Question toCreateEntity(QuestionRequest request){
         SchoolSubject schoolSubject = subjectService.getSubjectByName(request.getSchoolSubjectName());
 
-        Question question = Question.builder()
+        return Question.builder()
                 .teacherId(request.getTeacherId())
                 .description(request.getDescription())
                 .schoolSubject(schoolSubject)
@@ -39,8 +41,8 @@ public class QuestionMapper {
                 .checkType(request.getCheckType())
                 .difficulty(request.getDifficulty())
                 .rankPoints(request.getRankPoints())
+                .scorePoints(request.getTestPoints())
                 .build();
-        return question;
     }
     public QuestionResponse toResponse(Question question){
         return QuestionResponse.builder()
@@ -53,8 +55,17 @@ public class QuestionMapper {
                 .answer(question.getAnswer())
                 .type(question.getType())
                 .difficultly(question.getDifficulty())
+                .testPoints(question.getScorePoints())
                 .rankPoints(question.getRankPoints())
                 .createdAt(question.getCreatedAt())
+                .build();
+    }
+    public SolveQuestionResponse toSolveResponse(Question question){
+        return SolveQuestionResponse.builder()
+                .questionId(question.getId())
+                .description(question.getDescription())
+                .schoolSubjectName(question.getSchoolSubject().getName())
+                .difficultly(question.getDifficulty())
                 .build();
     }
 }

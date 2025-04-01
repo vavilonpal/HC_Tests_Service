@@ -1,16 +1,13 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
-import org.combs.micro.hc_tests_service.enums.QuestionCheckType;
+import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
-import org.springframework.http.converter.json.JsonbHttpMessageConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -37,8 +34,11 @@ public class Question {
     @Column(name = "description", nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "answer")
-    private String answer;
+
+    // todo замапить борбаотку ответа как массив
+    @Convert(converter = AnswerJsonConverter.class)
+    @Column(name = "answer", columnDefinition = "jsonb")
+    private Map<String, List<Object>> answer;
 
     @ManyToOne
     @JoinColumn(name = "school_subj_id")
@@ -58,10 +58,13 @@ public class Question {
     @Column(name = "rank_points")
     private Integer rankPoints;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "test_points")
+    private Integer scorePoints;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist

@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Set;
 
 
+/***
+ * Controller for operations
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/test")

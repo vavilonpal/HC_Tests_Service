@@ -52,12 +52,16 @@ CREATE TABLE if not exists hc_school_tests_sc.results
 CREATE TABLE IF NOT EXISTS hc_school_tests_sc.answers
 (
     id serial primary key,
-    --result_id bigint references hc_school_tests_sc.results(id),
+    student_id bigint,
+    result_id bigint references hc_school_tests_sc.results(id),
     question_id bigint not null  references hc_school_tests_sc.questions(id),
     student_answer text,
-    score_points int
-);
+    score_points int,
+    rank_points int,
+    created_at TIMESTAMP DEFAULT now(),
+    updated_at TIMESTAMP
 
+);
 
 
 
