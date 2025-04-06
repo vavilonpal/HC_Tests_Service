@@ -30,6 +30,7 @@ public class AnswerService {
     public Answer createAnswer(AnswerRequest request){
         Answer answer = answerMapper.toAnswer(request);
         pointsHandler.defineAnswerCorrectness(answer);
+
         return answerRepository.save(answer);
     }
 
@@ -39,6 +40,7 @@ public class AnswerService {
             return answer;
         }
         answer.setStudentAnswer(request.getStudentAnswer());
+        pointsHandler.defineAnswerCorrectness(answer);
         return answerRepository.save(answer);
     }
 }

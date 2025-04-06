@@ -27,13 +27,13 @@ public class ResultController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/student/{studentId}")
+   /* @GetMapping("/student/{studentId}")
     public ResponseEntity<List<ResultResponse>> getResultsByStudentId(@PathVariable Long studentId){
         List<ResultResponse> studentResults = resultService.getStudentAllResults(studentId).stream()
                 .map(resultMapper::entityToResponse)
                 .toList();
         return ResponseEntity.ok(studentResults);
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<ResultResponse> createResult(@RequestBody ResultRequest resultRequest){

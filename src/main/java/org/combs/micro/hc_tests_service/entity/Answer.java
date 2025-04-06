@@ -15,6 +15,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"question", "studentId"})
+@ToString(exclude = {"question", "result"})
 @Builder
 @Entity
 @Table(name =  "answers", schema = "hc_school_tests_sc")

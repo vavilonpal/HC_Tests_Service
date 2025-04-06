@@ -44,6 +44,8 @@ public class AnswerMapper {
                         .getId())
                 .studentId(answer.getStudentId())
                 .studentAnswer(answer.getStudentAnswer())
+                .rankPoints(answer.getRankPoints())
+                .scorePoints(answer.getScorePoints())
                 .createdAt(answer.getCreatedAt())
                 .updatedAt(answer.getUpdatedAt())
                 .build();

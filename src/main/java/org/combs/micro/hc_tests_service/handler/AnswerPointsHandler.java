@@ -18,7 +18,7 @@ public class AnswerPointsHandler {
     public void defineAnswerCorrectness(Answer answer) {
         Question question = answer.getQuestion();
         // Если стоит флаг "не проверяемый", то оставляем выдачу очков на усмотрение учителя
-        if (!question.getCheckType()) {
+        if (question.getCheckType()) {
             answer.setRankPoints(rankPoints);
             answer.setScorePoints(scorePoints);
         }
@@ -87,36 +87,50 @@ public class AnswerPointsHandler {
 
         calculatePoints(countOfCorrectAnswers, countOfStudentCorrectAnswers, question);
         setPointsToAnswer(answer);
+
     }
     private void singleChoiceTypeHandle(Answer answer, Question question) {
-        String correctAnswer = (String) question
-                .getAnswer()
-                .get("correct")
-                .get(0);
+        Object correctAnswer = question.getAnswer().get("correct").get(0);
+        Object studentAnswer = answer.getStudentAnswer().get("answer").get(0);
 
-        String studentAnswer = (String) answer
-                .getStudentAnswer()
-                .get("answer")
-                .get(0);
-
-        if (studentAnswer.isBlank()) {
+        if (studentAnswer == null || studentAnswer.toString().isBlank()) {
             return;
         }
-        // Если ответ числовой
-        if (isNumeric(correctAnswer)) {
-            if (Integer.parseInt(correctAnswer) == Integer.parseInt(studentAnswer)){
-                this.rankPoints = question.getRankPoints();
-                this.scorePoints = question.getScorePoints();
-                return;
-            };
-        }
-        // Если ответ строковой
-        if (correctAnswer.equalsIgnoreCase(studentAnswer)){
-            this.rankPoints = question.getRankPoints();
-            this.scorePoints = question.getScorePoints();
+
+        String correctStr = correctAnswer.toString().trim();
+        String studentStr = studentAnswer.toString().trim();
+
+        // Попытка сравнения как чисел
+        if (isNumeric(correctStr) && isNumeric(studentStr)) {
+            try {
+                double correctNum = Double.parseDouble(correctStr);
+                double studentNum = Double.parseDouble(studentStr);
+
+                if (Double.compare(correctNum, studentNum) == 0) {
+                    assignPoints(question);
+                    setPointsToAnswer(answer);
+                }
+                // при неправильном ответе ставим нулевые значения
+                setPointsToAnswer(answer);
+            } catch (NumberFormatException e) {
+                System.out.println("NumberFormatException");
+            }
             return;
-        };
+        }
+
+        // Строковое сравнение
+        if (correctStr.equalsIgnoreCase(studentStr)) {
+            assignPoints(question);
+            setPointsToAnswer(answer);
+        }
+        setPointsToAnswer(answer);
     }
+
+    private void assignPoints(Question question) {
+        this.rankPoints = question.getRankPoints();
+        this.scorePoints = question.getScorePoints();
+    }
+
 
     private void calculatePoints(int countOfCorrectAnswers, int countOfStudentCorrectAnswers, Question question){
         float correctnessOfAnswers = (countOfCorrectAnswers > 0)

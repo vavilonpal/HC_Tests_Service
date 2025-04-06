@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,6 +24,10 @@ public class Result {
     @ManyToOne
     @JoinColumn(name = "test_id", nullable = false)
     private SchoolTest schoolTest;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "result_id")
+    private List<Answer> answers;
 
     @Column(name = "student_id", nullable = false)
     private Long studentId;
