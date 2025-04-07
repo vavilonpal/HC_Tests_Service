@@ -4,6 +4,7 @@ package org.combs.micro.hc_tests_service.service;
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.Answer;
 import org.combs.micro.hc_tests_service.exeptions.AnswerNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.ThisAnswerHasInvalidResultId;
 import org.combs.micro.hc_tests_service.handler.AnswerPointsHandler;
 import org.combs.micro.hc_tests_service.mapper.AnswerMapper;
 import org.combs.micro.hc_tests_service.repository.AnswerRepository;
@@ -11,6 +12,7 @@ import org.combs.micro.hc_tests_service.request.AnswerRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,9 @@ public class AnswerService {
 
     public Answer updateAnswer(Long answerId, AnswerRequest request) {
         Answer answer = getAnswerById(answerId);
+        if (!Objects.equals(answer.getResult().getId(), request.getResultId())){
+            throw  new ThisAnswerHasInvalidResultId("Invalid Result id:"+request.getResultId());
+        }
         if (answer.getStudentAnswer().get("answer").equals(request.getStudentAnswer().get("answer"))){
             return answer;
         }

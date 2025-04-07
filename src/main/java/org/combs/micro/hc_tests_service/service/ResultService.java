@@ -31,13 +31,6 @@ public class ResultService {
     public Result getResultById(Long id) {
         return resultRepository.findById(id).orElseThrow(() -> new ResultNotFoundException("Result not found"));
     }
-
-    public List<Result> getAllResults() {
-        return resultRepository.findAll();
-    }
-
-
-
     public Result createResult(ResultRequest resultRequest) {
         Result result = resultMapper.requestToResult(resultRequest);
         return resultRepository.save(result);

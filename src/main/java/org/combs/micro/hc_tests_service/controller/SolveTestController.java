@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/test-solve")
 @RequiredArgsConstructor
-/**
- * Контроллер отвечает за отправку ответов на вопросы
- * И получение вопросов для решения
+/*
+  Контроллер отвечает за отправку ответов на вопросы
+  И получение вопросов для решения
  */
 public class SolveTestController {
     private final QuestionService questionService;
@@ -63,6 +63,12 @@ public class SolveTestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Сохраняем ответ
+     * @param resultId - id резульатата к которому будет относится этот ответ
+     * @param request - запрос с ответом
+     * @return
+     */
     @PostMapping("/{resultId}/answer")
     public ResponseEntity<AnswerResponse> sendAnswer(@PathVariable Long resultId,
                                                      @RequestBody AnswerRequest request) {
@@ -73,7 +79,6 @@ public class SolveTestController {
     }
     /**
      * Обновление отправленного ответа
-     * @param testId
      * @param answerId
      * @param request
      * @return
