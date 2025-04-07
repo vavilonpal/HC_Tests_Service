@@ -7,14 +7,21 @@ import org.combs.micro.hc_tests_service.enums.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+
+// todo допилить метод для текста, все остальное вроде работает
 @Component
 public class AnswerPointsHandler {
     private Integer rankPoints = 0;
     private Integer scorePoints = 0;
 
-
+    /**
+     * Метод определяет сколько нжуно дать очков за полученный ответ
+     * @param answer - ответ студента
+     */
     public void defineAnswerCorrectness(Answer answer) {
         Question question = answer.getQuestion();
         // Если стоит флаг "не проверяемый", то оставляем выдачу очков на усмотрение учителя
@@ -23,19 +30,23 @@ public class AnswerPointsHandler {
             answer.setScorePoints(scorePoints);
         }
 
-        if (question.getType().equals(QuestionType.multiple_choice)){
+        if (question.getType().equals(QuestionType.multiple_choice)) {
             multiChoiceTypeHandle(answer, question);
         }
-        if (question.getType().equals(QuestionType.single_choice)){
+        if (question.getType().equals(QuestionType.single_choice)) {
             singleChoiceTypeHandle(answer, question);
         }
-        if (question.getType().equals(QuestionType.text)){
+        if (question.getType().equals(QuestionType.text)) {
             textTypeHandle(answer, question);
         }
     }
 
-
-    private void textTypeHandle(Answer answer, Question question){
+    /**
+     * Метод призван обрбатывать ответ типа "text"
+     * @param answer - ответ студента
+     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
+     */
+    private void textTypeHandle(Answer answer, Question question) {
         String correctAnswer = (String) question
                 .getAnswer()
                 .get("correct")
@@ -51,44 +62,64 @@ public class AnswerPointsHandler {
         }
         // Если ответ числовой
         if (isNumeric(correctAnswer)) {
-            if (Integer.parseInt(correctAnswer) == Integer.parseInt(studentAnswer)){
+            if (Integer.parseInt(correctAnswer) == Integer.parseInt(studentAnswer)) {
                 this.rankPoints = question.getRankPoints();
                 this.scorePoints = question.getScorePoints();
                 return;
-            };
+            }
+            ;
         }
         // Если ответ строковой
-        if (correctAnswer.equalsIgnoreCase(studentAnswer.strip())){
+        if (correctAnswer.equalsIgnoreCase(studentAnswer.strip())) {
             this.rankPoints = question.getRankPoints();
             this.scorePoints = question.getScorePoints();
             return;
-        };
+        }
+        ;
     }
+
+
+
+    /**
+     * Метод призван обрбатывать ответ типа "multi-Choice"
+     * @param answer - ответ студента
+     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
+     */
     private void multiChoiceTypeHandle(Answer answer, Question question) {
         int countOfCorrectAnswers;
-        int countOfStudentCorrectAnswers = 0;
-        Set<Object> correctAnswers = new HashSet<>(question.getAnswer().get("correct"));
+        Set<String> correctAnswers = question.getAnswer().get("correct").stream()
+                .map(Objects::toString)
+                .collect(Collectors.toSet());
         countOfCorrectAnswers = correctAnswers.size();
-        Set<Object> studentAnswers = new HashSet<>(answer.getStudentAnswer().get("answer"));
 
-        if (studentAnswers.isEmpty()){
+        Set<String> studentAnswers = answer.getStudentAnswer().get("answer").stream()
+                .map(Objects::toString)
+                .collect(Collectors.toSet());
+
+        if (studentAnswers.isEmpty()) {
             return;
         }
 
-        for (Object studentAnswer : studentAnswers){
-            if (correctAnswers.contains(studentAnswer)){
-                countOfStudentCorrectAnswers += 1;
+        int  countOfStudentCorrectAnswers = 0;
+        for (String studentAnswer : studentAnswers) {
+            if (correctAnswers.contains(studentAnswer)) {
+                countOfStudentCorrectAnswers++;
+            }else {
+                countOfStudentCorrectAnswers--;
             }
         }
-        // Тут отнимаем неправильно указанные ответы
-        // То есть если всего 2 ответа, 1 правльный, а студент указал 2, то у него выйдет 0 правльных;
-        // Убираем лишние ответы, но не даём уйти в отрицательные значения
-        countOfStudentCorrectAnswers = Math.max(0, countOfStudentCorrectAnswers - (studentAnswers.size() - countOfCorrectAnswers));
 
         calculatePoints(countOfCorrectAnswers, countOfStudentCorrectAnswers, question);
         setPointsToAnswer(answer);
 
     }
+
+
+    /**
+     * Метод призван обрбатывать ответ типа "single-Choice"
+     * @param answer - ответ студента
+     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
+     */
     private void singleChoiceTypeHandle(Answer answer, Question question) {
         Object correctAnswer = question.getAnswer().get("correct").get(0);
         Object studentAnswer = answer.getStudentAnswer().get("answer").get(0);
@@ -126,22 +157,40 @@ public class AnswerPointsHandler {
         setPointsToAnswer(answer);
     }
 
+
+    /**
+     * Метод вычисляет процент правлиьных ответов
+     * и на его основе устанавливает количество очков
+     * @param countOfCorrectAnswers - число правилньых ответов вопроса
+     * @param countOfStudentCorrectAnswers - число правильных ответов данныз студентом
+     * @param question - вопрос на который был дан ответ
+     */
+    private void calculatePoints(int countOfCorrectAnswers, int countOfStudentCorrectAnswers, Question question) {
+
+        if (countOfCorrectAnswers == countOfStudentCorrectAnswers){
+            assignPoints(question);
+        }
+        // Если выбрано больше неправильных овтетов чем правлиьных, то оставляем нулевые очки
+        if (countOfStudentCorrectAnswers < 0){
+            return;
+        }
+
+        float correctnessOfAnswers = 0.0f;
+        if (countOfCorrectAnswers > 0) {
+            correctnessOfAnswers = ((float) countOfStudentCorrectAnswers / countOfCorrectAnswers);
+        }
+
+        this.rankPoints = Math.round(question.getRankPoints() * correctnessOfAnswers);
+        this.scorePoints = Math.round(question.getScorePoints() * correctnessOfAnswers);
+    }
+
+
     private void assignPoints(Question question) {
         this.rankPoints = question.getRankPoints();
         this.scorePoints = question.getScorePoints();
     }
 
-
-    private void calculatePoints(int countOfCorrectAnswers, int countOfStudentCorrectAnswers, Question question){
-        float correctnessOfAnswers = (countOfCorrectAnswers > 0)
-                ? (100.0f / countOfCorrectAnswers) * countOfStudentCorrectAnswers
-                : 0.0f;
-
-        this.rankPoints = (int)(question.getRankPoints() * (correctnessOfAnswers / 100));
-        this.scorePoints = (int)(question.getScorePoints() * (correctnessOfAnswers / 100));
-    }
-
-    private void setPointsToAnswer(Answer answer){
+    private void setPointsToAnswer(Answer answer) {
         answer.setRankPoints(rankPoints);
         answer.setScorePoints(scorePoints);
     }
