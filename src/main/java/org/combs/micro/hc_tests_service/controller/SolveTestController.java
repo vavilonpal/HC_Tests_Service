@@ -8,10 +8,10 @@ import org.combs.micro.hc_tests_service.entity.Result;
 import org.combs.micro.hc_tests_service.mapper.AnswerMapper;
 import org.combs.micro.hc_tests_service.mapper.QuestionMapper;
 import org.combs.micro.hc_tests_service.mapper.ResultMapper;
+import org.combs.micro.hc_tests_service.repository.cacheRepository.AnswerCacheRepository;
 import org.combs.micro.hc_tests_service.request.AnswerRequest;
 import org.combs.micro.hc_tests_service.request.ResultRequest;
 import org.combs.micro.hc_tests_service.response.AnswerResponse;
-import org.combs.micro.hc_tests_service.response.QuestionResponse;
 import org.combs.micro.hc_tests_service.response.ResultResponse;
 import org.combs.micro.hc_tests_service.response.SolveQuestionResponse;
 import org.combs.micro.hc_tests_service.service.AnswerService;
@@ -37,6 +37,7 @@ public class SolveTestController {
     private final QuestionMapper questionMapper;
     private final ResultService resultService;
     private final ResultMapper resultMapper;
+    private final AnswerCacheRepository answerCacheRepository;
 
     @PostMapping
     public ResponseEntity<Set<SolveQuestionResponse>> startTestSolving(@RequestBody ResultRequest resultRequest){
@@ -56,13 +57,6 @@ public class SolveTestController {
         return ResponseEntity.ok(solveResponse);
     }
 
-    @GetMapping("/answer/{id}")
-    public ResponseEntity<AnswerResponse> getAnswer (@PathVariable Long id){
-        Answer answer = answerService.getAnswerById(id);
-        AnswerResponse response = answerMapper.answerToResponse(answer);
-        return ResponseEntity.ok(response);
-    }
-
     /**
      * Сохраняем ответ
      * @param resultId - id резульатата к которому будет относится этот ответ
@@ -74,6 +68,20 @@ public class SolveTestController {
                                                      @RequestBody AnswerRequest request) {
         request.setResultId(resultId);
         Answer answer = answerService.createAnswer(request);
+        answerCacheRepository.save(answer);
+        AnswerResponse response = answerMapper.answerToResponse(answer);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/answer/{id}")
+    public ResponseEntity<AnswerResponse> getAnswer (@PathVariable Long id){
+
+        AnswerResponse cachedAnswerResponse = answerCacheRepository.findById(id);
+        if (cachedAnswerResponse != null){
+            return ResponseEntity.ok(cachedAnswerResponse);
+        }
+
+        Answer answer = answerService.getAnswerById(id);
         AnswerResponse response = answerMapper.answerToResponse(answer);
         return ResponseEntity.ok(response);
     }

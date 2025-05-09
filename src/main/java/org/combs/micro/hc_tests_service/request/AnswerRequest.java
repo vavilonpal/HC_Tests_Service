@@ -1,10 +1,7 @@
 package org.combs.micro.hc_tests_service.request;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
 import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.Result;
@@ -18,6 +15,7 @@ import java.util.Map;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AnswerRequest {
 

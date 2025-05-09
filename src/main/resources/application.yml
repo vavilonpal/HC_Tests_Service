@@ -11,15 +11,6 @@ spring:
     url: jdbc:postgresql://localhost:5434/postgres
     username: user
     password: user
-
-#  cache:
-#    redis:
-#      time-to-live: 1m
-#  redis:
-#    host: localhost
-#    port: 6379
-#    password: redis
-
   #JPA config
   jpa:
     hibernate:
@@ -28,7 +19,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: true
-
+  cache:
+    redis:
+      time-to-live: 1m
+  data:
+    redis:
+      host: localhost
+      port: 6379
   #Flyaway config
   flyway:
     enabled: true
