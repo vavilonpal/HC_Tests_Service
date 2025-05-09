@@ -78,6 +78,8 @@ public class SolveTestController {
 
         AnswerResponse cachedAnswerResponse = answerCacheRepository.findById(id);
         if (cachedAnswerResponse != null){
+            System.out.println("fgfggg");
+
             return ResponseEntity.ok(cachedAnswerResponse);
         }
 

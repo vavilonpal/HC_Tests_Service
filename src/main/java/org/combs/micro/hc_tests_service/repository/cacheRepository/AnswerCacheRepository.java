@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -19,9 +20,10 @@ public class AnswerCacheRepository {
     private final RedisTemplate<String, AnswerResponse> redisTemplate;
     private final AnswerCacheTtlHandler ttlHandler;
     private final AnswerMapper mapper;
+
     public void save(Answer answer) {
         Duration answerTtl = ttlHandler.calculateTtl(answer);
-        if (answerTtl.isZero()){
+        if (answerTtl.isZero()) {
             log.info("Time expired answer doesnt may to save in  cache");
             return;
         }
@@ -31,8 +33,9 @@ public class AnswerCacheRepository {
 
     public AnswerResponse findById(Long id) {
         AnswerResponse cachedAnswerResponse = redisTemplate.opsForValue().get("answer:" + id);
+        System.out.println(cachedAnswerResponse);
         log.info("Get cached Answer by id: {}", id);
-       return cachedAnswerResponse;
+        return cachedAnswerResponse;
     }
 
     public void deleteById(Long id) {

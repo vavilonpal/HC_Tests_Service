@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.combs.micro.hc_tests_service.entity.Answer;
 import org.combs.micro.hc_tests_service.entity.Question;
@@ -26,17 +27,11 @@ import java.time.Duration;
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "spring.cache.redis")
+@RequiredArgsConstructor
 public class RedisConfiguration {
 
     private final Duration defaultTimeToLive = Duration.ofMinutes(1);
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return objectMapper;
-    }
+    private final ObjectMapper objectMapper;
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory){
@@ -62,24 +57,9 @@ public class RedisConfiguration {
 
 
         Jackson2JsonRedisSerializer<AnswerResponse> serializer = new Jackson2JsonRedisSerializer<>(AnswerResponse.class);
-        serializer.setObjectMapper(objectMapper());
+        serializer.setObjectMapper(objectMapper);
         template.setValueSerializer(serializer);
 
         return template;
     }
-    @Bean
-    public RedisTemplate<String, QuestionResponse> questionRedisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, QuestionResponse> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-
-
-        Jackson2JsonRedisSerializer<QuestionResponse> serializer = new Jackson2JsonRedisSerializer<>(QuestionResponse.class);
-        serializer.setObjectMapper(objectMapper());
-        template.setValueSerializer(serializer);
-
-        return template;
-    }
-
-
-
 }
