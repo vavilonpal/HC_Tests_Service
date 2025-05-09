@@ -66,6 +66,7 @@ public class SolveTestController {
     @PostMapping("/{resultId}/answer")
     public ResponseEntity<AnswerResponse> sendAnswer(@PathVariable Long resultId,
                                                      @RequestBody AnswerRequest request) {
+
         request.setResultId(resultId);
         Answer answer = answerService.createAnswer(request);
         answerCacheRepository.save(answer);

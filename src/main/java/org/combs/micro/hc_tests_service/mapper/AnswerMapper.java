@@ -28,6 +28,8 @@ public class AnswerMapper {
         Question question = questionService.getQuestionById(request.getQuestionId());
         Result result = resultService.getResultById(request.getResultId());
 
+        resultService.checkTestSolvingTimeExpire(result);
+
         return Answer.builder()
                 .studentAnswer(request.getStudentAnswer())
                 .result(result)
@@ -36,7 +38,7 @@ public class AnswerMapper {
                 .build();
     }
 
-    public AnswerResponse answerToResponse(Answer answer){
+    public AnswerResponse answerToResponse(Answer answer) {
         return AnswerResponse.builder()
                 .questionDescription(answer.getQuestion()
                         .getDescription())

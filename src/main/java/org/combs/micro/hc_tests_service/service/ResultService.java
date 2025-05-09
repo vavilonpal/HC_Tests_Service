@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.client.StudentServiceClient;
 import org.combs.micro.hc_tests_service.entity.Answer;
 import org.combs.micro.hc_tests_service.entity.Result;
+import org.combs.micro.hc_tests_service.exeptions.AttemptTimeSolveExpireException;
 import org.combs.micro.hc_tests_service.exeptions.ResultNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.StudentNotFoundException;
 import org.combs.micro.hc_tests_service.mapper.ResultMapper;
@@ -23,6 +24,12 @@ public class ResultService {
     //todo add checking user assign to result
     private  StudentServiceClient studentServiceClient;
 
+    public boolean checkTestSolvingTimeExpire(Result result){
+        if (result.getFinishedAt() != null){
+             throw new AttemptTimeSolveExpireException("Test solve time is expire");
+        }
+        return true;
+    }
 
    /* public List<Result> getStudentAllResults(Long studentId) {
         checkStudentExists(studentId);

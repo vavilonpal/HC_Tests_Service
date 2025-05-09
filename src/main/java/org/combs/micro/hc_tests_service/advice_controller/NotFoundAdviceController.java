@@ -17,27 +17,27 @@ public class NotFoundAdviceController {
     public ResponseEntity<ExceptionResponse> handleSchoolNotFoundException(SchoolTestNotFoundException exception){
         String exceptionMessage = exception.getMessage();
         ExceptionResponse response = new ExceptionResponse(exceptionMessage);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleQuestionNotFoundException(QuestionNotFoundException exception){
         String exceptionMessage = exception.getMessage();
         ExceptionResponse response = new ExceptionResponse(exceptionMessage);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(ResultNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleResultNotFoundException(ResultNotFoundException exception){
         String exceptionMessage = exception.getMessage();
         ExceptionResponse response = new ExceptionResponse(exceptionMessage);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(SchoolSubjectNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleSchoolSubjectNotFoundException(SchoolSubjectNotFoundException exception){
         String exceptionMessage = exception.getMessage();
         ExceptionResponse response = new ExceptionResponse(exceptionMessage);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.badRequest().body(response);
     }
 }
