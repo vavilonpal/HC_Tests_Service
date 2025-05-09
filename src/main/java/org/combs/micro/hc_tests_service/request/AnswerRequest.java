@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.ScriptAssert;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 @Data
 public class AnswerRequest {
 
+    @NotNull
     private Long studentId;
     private Long resultId;
     private Long questionId;

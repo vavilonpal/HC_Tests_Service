@@ -36,7 +36,7 @@ dependencies {
 	//implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.9.4'
 	implementation 'com.vladmihalcea:hibernate-types-52:2.21.1'
 	//Redis
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //	implementation 'org.springframework.session:spring-session-data-redis:3.4.2'
 	//Open Feign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'

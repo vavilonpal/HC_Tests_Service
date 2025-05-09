@@ -19,6 +19,8 @@ import java.util.Objects;
 public class ResultService {
     private final ResultMapper resultMapper;
     private final ResultRepository resultRepository;
+
+    //todo add checking user assign to result
     private  StudentServiceClient studentServiceClient;
 
 
