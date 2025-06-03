@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.combs.micro.hc_tests_service.enums.RoleType;
@@ -36,8 +37,7 @@ public class UserPersistRequest {
     @NotBlank(message = "Full name is empty")
     private String fullName;
 
-
-    private RoleType role;
+    private RoleType role = RoleType.STUDENT;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private boolean passwordsIsMatch = false;
