@@ -4,14 +4,13 @@ package org.combs.micro.hc_tests_service.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.combs.micro.hc_tests_service.entity.Answer;
-import org.combs.micro.hc_tests_service.exeptions.AnswerNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.AnswerNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.ThisAnswerHasInvalidResultId;
 import org.combs.micro.hc_tests_service.handler.AnswerPointsHandler;
 import org.combs.micro.hc_tests_service.mapper.AnswerMapper;
 import org.combs.micro.hc_tests_service.repository.AnswerRepository;
 import org.combs.micro.hc_tests_service.repository.cacheRepository.AnswerCacheRepository;
 import org.combs.micro.hc_tests_service.request.AnswerRequest;
-import org.combs.micro.hc_tests_service.response.AnswerResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

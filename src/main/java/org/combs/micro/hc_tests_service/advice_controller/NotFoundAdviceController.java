@@ -1,10 +1,10 @@
 package org.combs.micro.hc_tests_service.advice_controller;
 
 
-import org.combs.micro.hc_tests_service.exeptions.QuestionNotFoundException;
-import org.combs.micro.hc_tests_service.exeptions.ResultNotFoundException;
-import org.combs.micro.hc_tests_service.exeptions.SchoolSubjectNotFoundException;
-import org.combs.micro.hc_tests_service.exeptions.SchoolTestNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.QuestionNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.ResultNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.SchoolSubjectNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.SchoolTestNotFoundException;
 import org.combs.micro.hc_tests_service.response.ExceptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

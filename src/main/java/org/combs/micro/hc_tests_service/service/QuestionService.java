@@ -3,7 +3,7 @@ package org.combs.micro.hc_tests_service.service;
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
-import org.combs.micro.hc_tests_service.exeptions.QuestionNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.QuestionNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.existsException.QuestionByThisDescriptionExistsInThisTest;
 import org.combs.micro.hc_tests_service.mapper.QuestionMapper;
 import org.combs.micro.hc_tests_service.repository.QuestionRepository;

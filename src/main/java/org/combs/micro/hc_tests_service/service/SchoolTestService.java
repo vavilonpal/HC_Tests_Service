@@ -2,15 +2,13 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
-import org.combs.micro.hc_tests_service.exeptions.SchoolSubjectNotFoundException;
-import org.combs.micro.hc_tests_service.exeptions.TeacherNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.SchoolSubjectNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.TeacherNotFoundException;
 import org.combs.micro.hc_tests_service.mapper.SchoolTestMapper;
 import org.combs.micro.hc_tests_service.repository.TestRepository;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service

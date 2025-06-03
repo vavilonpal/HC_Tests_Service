@@ -1,9 +1,7 @@
 package org.combs.micro.hc_tests_service.advice_controller;
 
 
-import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.exeptions.AttemptTimeSolveExpireException;
-import org.combs.micro.hc_tests_service.exeptions.SchoolTestNotFoundException;
 import org.combs.micro.hc_tests_service.response.ExceptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

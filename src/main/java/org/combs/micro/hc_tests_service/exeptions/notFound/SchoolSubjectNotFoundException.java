@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.exeptions;
+package org.combs.micro.hc_tests_service.exeptions.notFound;
 
 public class SchoolSubjectNotFoundException extends RuntimeException {
     public SchoolSubjectNotFoundException() {

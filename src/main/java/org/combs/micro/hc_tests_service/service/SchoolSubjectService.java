@@ -2,13 +2,11 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
-import org.combs.micro.hc_tests_service.exeptions.SchoolSubjectNotFoundException;
+import org.combs.micro.hc_tests_service.exeptions.notFound.SchoolSubjectNotFoundException;
 import org.combs.micro.hc_tests_service.repository.SchoolSubjectRepository;
 import org.combs.micro.hc_tests_service.request.SchoolSubjectRequest;
-import org.combs.micro.hc_tests_service.response.SchoolSubjectResponse;
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.EntityExistsException;
 import java.util.List;
 
 @Service
