@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.request;
+package org.combs.micro.hc_tests_service.request.user;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

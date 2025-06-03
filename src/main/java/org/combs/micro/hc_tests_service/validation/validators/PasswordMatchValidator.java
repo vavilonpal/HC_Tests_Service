@@ -3,7 +3,7 @@ package org.combs.micro.hc_tests_service.validation.validators;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
-import org.combs.micro.hc_tests_service.request.UserPersistRequest;
+import org.combs.micro.hc_tests_service.request.user.UserPersistRequest;
 import org.combs.micro.hc_tests_service.validation.annotations.PasswordMatch;
 
 @Slf4j

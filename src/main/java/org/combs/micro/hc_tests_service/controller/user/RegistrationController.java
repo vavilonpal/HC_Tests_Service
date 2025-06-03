@@ -5,7 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.User;
 import org.combs.micro.hc_tests_service.mapper.UserMapper;
-import org.combs.micro.hc_tests_service.request.UserPersistRequest;
+import org.combs.micro.hc_tests_service.request.user.UserPersistRequest;
 import org.combs.micro.hc_tests_service.response.UserResponse;
 import org.combs.micro.hc_tests_service.service.UserRegistrationService;
 import org.springframework.http.ResponseEntity;

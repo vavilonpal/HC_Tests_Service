@@ -2,7 +2,8 @@ package org.combs.micro.hc_tests_service.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.User;
-import org.combs.micro.hc_tests_service.request.UserPersistRequest;
+import org.combs.micro.hc_tests_service.request.user.UserPersistRequest;
+import org.combs.micro.hc_tests_service.response.UserProfileResponse;
 import org.combs.micro.hc_tests_service.response.UserResponse;
 import org.combs.micro.hc_tests_service.service.RoleService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -47,6 +48,14 @@ public class UserMapper {
                         .getName()
                         .toString()
                 )
+                .build();
+    }
+
+    public UserProfileResponse entityToProfileResponse(User user) {
+        return UserProfileResponse.builder()
+                .username(user.getUsername())
+                .fullName(user.getFullName())
+                .email(user.getEmail())
                 .build();
     }
 }
