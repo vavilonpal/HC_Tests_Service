@@ -53,6 +53,7 @@ public class SchoolTest {
     private Integer duration;
 
     @OneToMany(mappedBy = "test", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Question> questions = new HashSet<>();
 
     @Column(name = "created_at", nullable = false)
