@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.combs.micro.hc_tests_service.enums.RoleType;
+import org.combs.micro.hc_tests_service.validation.annotations.EmailNotOccupy;
+import org.combs.micro.hc_tests_service.validation.annotations.PasswordMatch;
+import org.combs.micro.hc_tests_service.validation.annotations.UserNameNotOccupy;
 
 @Getter
 @Setter

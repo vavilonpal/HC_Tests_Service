@@ -3,6 +3,7 @@ package org.combs.micro.hc_tests_service.validation.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
+import org.combs.micro.hc_tests_service.validation.validators.UserByEmailOccupyValidator;
 
 import java.lang.annotation.*;
 
