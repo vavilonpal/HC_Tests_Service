@@ -2,22 +2,16 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.Question;
-import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
-import org.combs.micro.hc_tests_service.enums.QuestionType;
 import org.combs.micro.hc_tests_service.exeptions.QuestionNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.existsException.QuestionByThisDescriptionExistsInThisTest;
 import org.combs.micro.hc_tests_service.mapper.QuestionMapper;
 import org.combs.micro.hc_tests_service.repository.QuestionRepository;
 import org.combs.micro.hc_tests_service.request.QuestionRequest;
-import org.combs.micro.hc_tests_service.response.QuestionResponse;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

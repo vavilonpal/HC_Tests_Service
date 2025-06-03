@@ -8,7 +8,7 @@ import org.combs.micro.hc_tests_service.request.SchoolSubjectRequest;
 import org.combs.micro.hc_tests_service.response.SchoolSubjectResponse;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityExistsException;
+import jakarta.persistence.EntityExistsException;
 import java.util.List;
 
 @Service

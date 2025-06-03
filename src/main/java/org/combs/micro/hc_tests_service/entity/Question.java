@@ -1,11 +1,13 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString(exclude = {"schoolSubject", "test"})
-@EqualsAndHashCode(of = {"schoolSubject", "description"})
+//@EqualsAndHashCode(of = {"schoolSubject", "description"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

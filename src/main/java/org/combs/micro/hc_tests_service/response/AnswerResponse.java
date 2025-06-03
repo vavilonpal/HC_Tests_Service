@@ -7,11 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
-import org.combs.micro.hc_tests_service.entity.Question;
-import org.combs.micro.hc_tests_service.entity.Result;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

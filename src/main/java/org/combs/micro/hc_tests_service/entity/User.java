@@ -1,8 +1,7 @@
 package org.combs.micro.hc_tests_service.entity;
 
 import lombok.*;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter

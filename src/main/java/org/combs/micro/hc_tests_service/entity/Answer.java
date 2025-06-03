@@ -1,12 +1,11 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
-import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.*;
 import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;

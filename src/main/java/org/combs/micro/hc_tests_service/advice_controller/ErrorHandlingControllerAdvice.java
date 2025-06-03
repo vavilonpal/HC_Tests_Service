@@ -1,6 +1,7 @@
 package org.combs.micro.hc_tests_service.advice_controller;
 
 
+import jakarta.validation.ConstraintViolationException;
 import org.combs.micro.hc_tests_service.validation.ValidationErrorResponse;
 import org.combs.micro.hc_tests_service.validation.Violation;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 

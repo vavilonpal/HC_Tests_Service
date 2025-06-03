@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.combs.micro.hc_tests_service.enums.RoleType;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Getter

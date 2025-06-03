@@ -8,12 +8,9 @@ import lombok.NoArgsConstructor;
 import org.combs.micro.hc_tests_service.enums.Complexity;
 import org.combs.micro.hc_tests_service.enums.TestType;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
