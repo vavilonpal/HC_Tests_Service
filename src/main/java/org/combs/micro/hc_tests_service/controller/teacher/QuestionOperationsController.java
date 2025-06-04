@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.controller;
+package org.combs.micro.hc_tests_service.controller.teacher;
 
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/test")
+@RequestMapping("/api/v1/tests")
 public class QuestionOperationsController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;

@@ -1,6 +1,7 @@
 package org.combs.micro.hc_tests_service.configuration.security;
 
 
+import org.combs.micro.hc_tests_service.enums.RoleType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/test/solve/**").hasRole(RoleType.STUDENT.toString())
+                        .requestMatchers("/api/v1/results/**").hasRole(RoleType.STUDENT.toString())
+                        .requestMatchers("/api/v1/tests/**").hasRole(RoleType.TEACHER.toString())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

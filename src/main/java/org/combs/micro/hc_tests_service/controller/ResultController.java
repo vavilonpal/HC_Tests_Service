@@ -20,25 +20,16 @@ public class ResultController {
     private final ResultService resultService;
     private final ResultMapper resultMapper;
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ResultResponse> getResultById(@PathVariable Long id){
-        ResultResponse response = resultMapper.entityToResponse(resultService.getResultById(id));
-        return ResponseEntity.ok(response);
-    }
-
-   /* @GetMapping("/student/{studentId}")
+   @GetMapping("/student/{studentId}")
     public ResponseEntity<List<ResultResponse>> getResultsByStudentId(@PathVariable Long studentId){
         List<ResultResponse> studentResults = resultService.getStudentAllResults(studentId).stream()
                 .map(resultMapper::entityToResponse)
                 .toList();
         return ResponseEntity.ok(studentResults);
-    }*/
-
-    @PostMapping
-    public ResponseEntity<ResultResponse> createResult(@RequestBody ResultRequest resultRequest){
-        return ResponseEntity.ok(ResultResponse.builder().build());
     }
 
-
+    /*todo
+    *  1. Get results statistics by test
+    *
+    * */
 }

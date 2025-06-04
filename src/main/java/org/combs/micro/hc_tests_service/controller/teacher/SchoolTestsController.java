@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.controller;
+package org.combs.micro.hc_tests_service.controller.teacher;
 
 
 import lombok.RequiredArgsConstructor;

@@ -10,6 +10,7 @@ import org.combs.micro.hc_tests_service.repository.ResultRepository;
 import org.combs.micro.hc_tests_service.request.ResultRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,9 +22,9 @@ public class ResultService {
 
     //todo add checking user assign to result
 
-    public boolean checkTestSolvingTimeExpire(Result result){
-        if (result.getFinishedAt() != null){
-             throw new AttemptTimeSolveExpireException("Test solve time is expire");
+    public boolean checkTestSolvingTimeExpire(Result result) {
+        if (result.getFinishedAt() != null) {
+            throw new AttemptTimeSolveExpireException("Test solve time is expire");
         }
         return true;
     }
@@ -37,6 +38,7 @@ public class ResultService {
     public Result getResultById(Long id) {
         return resultRepository.findById(id).orElseThrow(() -> new ResultNotFoundException("Result not found"));
     }
+
     public Result createResult(ResultRequest resultRequest) {
         Result result = resultMapper.requestToResult(resultRequest);
         return resultRepository.save(result);
@@ -60,7 +62,7 @@ public class ResultService {
 
         List<Answer> answers = result.getAnswers();
 
-       Integer rankPoints = answers.stream()
+        Integer rankPoints = answers.stream()
                 .filter(Objects::nonNull)
                 .map(Answer::getRankPoints)
                 .filter(Objects::nonNull)
@@ -82,4 +84,8 @@ public class ResultService {
         resultRepository.deleteById(id);
     }
 
+    public List<Result> getStudentAllResults(Long studentId) {
+        return null;
+
+    }
 }
