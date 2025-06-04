@@ -13,6 +13,7 @@ import org.combs.micro.hc_tests_service.service.SchoolSubjectService;
 import org.combs.micro.hc_tests_service.service.SchoolTestService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +26,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SchoolTestsController {
     private final SchoolTestService schoolTestService;
-    private final QuestionService questionService;
     private final SchoolTestMapper testMapper;
 
     @GetMapping
@@ -37,12 +37,7 @@ public class SchoolTestsController {
     }
     //todo Shows test image for teacher
 
-    // Shows student info about test
-    @GetMapping("/info/{id}")
-    public ResponseEntity<SchoolTestInfoResponse> getTestInfoById(@PathVariable Long id) {
-        SchoolTestInfoResponse testInfoResponse = testMapper.toInfoResponse(schoolTestService.getTestById(id));
-        return ResponseEntity.ok(testInfoResponse);
-    }
+
 
     @PostMapping
     public ResponseEntity<SchoolTestInfoResponse> createTest(@RequestBody @Valid SchoolTestRequest request) {

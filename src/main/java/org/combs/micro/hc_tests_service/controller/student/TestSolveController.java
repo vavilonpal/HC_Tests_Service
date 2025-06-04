@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.controller;
+package org.combs.micro.hc_tests_service.controller.student;
 
 
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.combs.micro.hc_tests_service.request.AnswerRequest;
 import org.combs.micro.hc_tests_service.request.ResultRequest;
 import org.combs.micro.hc_tests_service.response.AnswerResponse;
 import org.combs.micro.hc_tests_service.response.ResultResponse;
+import org.combs.micro.hc_tests_service.response.SchoolTestInfoResponse;
 import org.combs.micro.hc_tests_service.response.SolveQuestionResponse;
 import org.combs.micro.hc_tests_service.service.AnswerService;
 import org.combs.micro.hc_tests_service.service.QuestionService;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
   Контроллер отвечает за отправку ответов на вопросы
   И получение вопросов для решения
  */
-public class SolveTestController {
+public class TestSolveController {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final AnswerMapper answerMapper;
@@ -39,6 +40,13 @@ public class SolveTestController {
     private final ResultMapper resultMapper;
     private final AnswerCacheRepository answerCacheRepository;
 
+
+    // Shows student info about test
+    @GetMapping("/info/{id}")
+    public ResponseEntity<SchoolTestInfoResponse> getTestInfoById(@PathVariable Long id) {
+        SchoolTestInfoResponse testInfoResponse = testMapper.toInfoResponse(schoolTestService.getTestById(id));
+        return ResponseEntity.ok(testInfoResponse);
+    }
     @PostMapping
     public ResponseEntity<Set<SolveQuestionResponse>> startTestSolving(@RequestBody ResultRequest resultRequest){
         Result result = resultService.createResult(resultRequest);
