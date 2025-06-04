@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserProfileController {
     private final UserService userService;
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @GetMapping("/me")
     public ResponseEntity<UserProfileResponse> getUserProfile(final Authentication authentication){

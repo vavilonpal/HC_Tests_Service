@@ -22,12 +22,14 @@ import java.time.Duration;
 @Configuration
 @Setter
 @Getter
-@ConfigurationProperties(prefix = "jwt")
+//@ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
 
+    @Value("${jwt.private-key}")
     private RSAPrivateKey privateKey;
+    @Value("${jwt.public-key}")
     private RSAPublicKey publicKey;
-
+    @Value("${jwt.ttl}")
     private Duration ttl;
 
 
