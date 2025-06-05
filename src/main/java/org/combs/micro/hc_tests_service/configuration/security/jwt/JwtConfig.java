@@ -1,13 +1,14 @@
-package org.combs.micro.hc_tests_service.configuration.security;
+package org.combs.micro.hc_tests_service.configuration.security.jwt;
 
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.combs.micro.hc_tests_service.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -22,9 +23,8 @@ import java.time.Duration;
 @Configuration
 @Setter
 @Getter
-//@ConfigurationProperties(prefix = "jwt")
+@RequiredArgsConstructor
 public class JwtConfig {
-
     @Value("${jwt.private-key}")
     private RSAPrivateKey privateKey;
     @Value("${jwt.public-key}")
@@ -32,6 +32,7 @@ public class JwtConfig {
     @Value("${jwt.ttl}")
     private Duration ttl;
 
+    private final UserService userService;
 
 
     @Bean
@@ -50,7 +51,7 @@ public class JwtConfig {
     public JwtService jwtService
             (@Value("${spring.application.name}") final String appName,
              JwtDecoder jwtDecoder){
-        return new JwtService(appName, ttl, jwtEncoder());
+        return new JwtService(appName, ttl, jwtEncoder(), userService);
     }
 
 }

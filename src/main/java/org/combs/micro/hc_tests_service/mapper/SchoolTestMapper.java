@@ -6,6 +6,7 @@ import lombok.Data;
 import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
+import org.combs.micro.hc_tests_service.entity.User;
 import org.combs.micro.hc_tests_service.request.QuestionRequest;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
 import org.combs.micro.hc_tests_service.response.QuestionResponse;
@@ -13,6 +14,7 @@ import org.combs.micro.hc_tests_service.response.SchoolTestInfoResponse;
 import org.combs.micro.hc_tests_service.response.SchoolTestSolveInfoResponse;
 import org.combs.micro.hc_tests_service.service.QuestionService;
 import org.combs.micro.hc_tests_service.service.SchoolSubjectService;
+import org.combs.micro.hc_tests_service.service.UserService;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -25,15 +27,14 @@ import java.util.stream.Collectors;
 public class SchoolTestMapper {
     private final SchoolSubjectService subjectService;
     private final QuestionMapper questionMapper;
+    private final UserService userService;
 
     public SchoolTest toCreateEntity(SchoolTestRequest request) {
-        // Маппинг сущности школьного предмета
         SchoolSubject schoolSubject = subjectService.getSubjectByName(request.getSchoolSubjectName());
-        SchoolTest schoolTest = new SchoolTest();
-
+        User teacher = userService.getUserById(request.getTeacherId());
         return SchoolTest.builder()
                 .title(request.getTitle())
-                .teacherId(request.getTeacherId())
+                .teacher(teacher)
                 .type(request.getTestType())
                 .schoolSubject(schoolSubject)
                 .complexity(request.getTestComplexity())
@@ -56,7 +57,6 @@ public class SchoolTestMapper {
         }
 
         test.setTitle(request.getTitle());
-        test.setTeacherId(request.getTeacherId());
         test.setType(request.getTestType());
         test.setComplexity(request.getTestComplexity());
         test.setClassLevel(request.getClassLevel());
@@ -73,7 +73,9 @@ public class SchoolTestMapper {
     public SchoolTestInfoResponse toInfoResponse(SchoolTest test) {
         return SchoolTestInfoResponse.builder()
                 .title(test.getTitle())
-                .teacherId(test.getTeacherId())
+                .teacherFullName(test.getTeacher()
+                        .getFullName()
+                )
                 .type(test.getType())
                 .complexity(test.getComplexity())
                 .schoolSubjectName(test.getSchoolSubject()

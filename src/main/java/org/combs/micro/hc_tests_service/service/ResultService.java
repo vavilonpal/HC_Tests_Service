@@ -10,7 +10,6 @@ import org.combs.micro.hc_tests_service.repository.ResultRepository;
 import org.combs.micro.hc_tests_service.request.ResultRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,19 +21,11 @@ public class ResultService {
 
     //todo add checking user assign to result
 
-    public boolean checkTestSolvingTimeExpire(Result result) {
+    public void checkTestSolvingTimeExpire(Result result) {
         if (result.getFinishedAt() != null) {
             throw new AttemptTimeSolveExpireException("Test solve time is expire");
         }
-        return true;
     }
-
-   /* public List<Result> getStudentAllResults(Long studentId) {
-        checkStudentExists(studentId);
-
-        return resultRepository.findAllByStudentId(studentId);
-    }*/
-
     public Result getResultById(Long id) {
         return resultRepository.findById(id).orElseThrow(() -> new ResultNotFoundException("Result not found"));
     }
@@ -87,5 +78,10 @@ public class ResultService {
     public List<Result> getStudentAllResults(Long studentId) {
         return null;
 
+    }
+
+
+
+    public void getReusltByIdAndStudentName(Long studentId, String username) {
     }
 }

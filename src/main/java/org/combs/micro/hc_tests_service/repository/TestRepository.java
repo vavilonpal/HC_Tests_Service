@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface TestRepository extends JpaRepository<SchoolTest, Long> {
-    @Query("select t from SchoolTest t " +
+  /*  @Query("select t from SchoolTest t " +
             "where (:subject is null or t.schoolSubject = :subject) " +
             "and (:complexity is null or t.complexity = :complexity) " +
             "and (:class_level is null or t.classLevel = :class_level) " +
@@ -25,5 +25,5 @@ public interface TestRepository extends JpaRepository<SchoolTest, Long> {
                                       @Param("complexity") Integer complexity,
                                       @Param("class_level") String classLevel,
                                       @Param("teacher_id") Long teacherId);
-
+*/
 }

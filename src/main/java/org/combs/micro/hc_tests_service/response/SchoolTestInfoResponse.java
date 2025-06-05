@@ -19,7 +19,7 @@ import java.util.List;
 public class SchoolTestInfoResponse {
 
     private String title;
-    private Long teacherId;
+    private String teacherFullName;
     private TestType type;
     private String schoolSubjectName;
     private Complexity complexity;
