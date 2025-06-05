@@ -1,16 +1,14 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -29,8 +27,9 @@ public class Result {
     @JoinColumn(name = "result_id")
     private List<Answer> answers;
 
-    @Column(name = "student_id", nullable = false)
-    private Long studentId;
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private User student;
 
     @Column(name = "score", nullable = false)
     private Integer score;

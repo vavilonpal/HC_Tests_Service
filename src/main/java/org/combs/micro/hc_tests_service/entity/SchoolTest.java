@@ -1,10 +1,7 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.combs.micro.hc_tests_service.enums.Complexity;
 import org.combs.micro.hc_tests_service.enums.TestType;
 
@@ -13,7 +10,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,8 +26,9 @@ public class SchoolTest {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "teacher_id", nullable = false)
-    private Long teacherId;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
+    private User teacher;
 
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
