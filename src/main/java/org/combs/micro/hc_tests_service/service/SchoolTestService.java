@@ -2,6 +2,7 @@ package org.combs.micro.hc_tests_service.service;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.SchoolTest;
+import org.combs.micro.hc_tests_service.enums.TestType;
 import org.combs.micro.hc_tests_service.exeptions.notFound.SchoolSubjectNotFoundException;
 import org.combs.micro.hc_tests_service.exeptions.notFound.TeacherNotFoundException;
 import org.combs.micro.hc_tests_service.mapper.SchoolTestMapper;
@@ -9,6 +10,7 @@ import org.combs.micro.hc_tests_service.repository.TestRepository;
 import org.combs.micro.hc_tests_service.request.SchoolTestRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -54,5 +56,9 @@ public class SchoolTestService {
 
     public void deleteTest(Long id) {
         testRepository.deleteById(id);
+    }
+
+    public List<SchoolTest> getAllTestsByType(TestType type) {
+        return  testRepository.getSchoolTestsByType(type);
     }
 }

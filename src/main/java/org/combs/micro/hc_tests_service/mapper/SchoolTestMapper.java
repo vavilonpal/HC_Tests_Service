@@ -72,10 +72,12 @@ public class SchoolTestMapper {
      */
     public SchoolTestInfoResponse toInfoResponse(SchoolTest test) {
         return SchoolTestInfoResponse.builder()
+                .id(test.getId())
                 .title(test.getTitle())
                 .teacherFullName(test.getTeacher()
                         .getFullName()
                 )
+                .classLevel(test.getClassLevel())
                 .type(test.getType())
                 .complexity(test.getComplexity())
                 .schoolSubjectName(test.getSchoolSubject()

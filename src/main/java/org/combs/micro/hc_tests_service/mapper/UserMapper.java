@@ -15,6 +15,10 @@ public class UserMapper {
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
 
+
+    public User toEntityFromJwtPr(){
+        return  null;
+    }
     /**
      * Method map register and update request to User Entity
      *

@@ -36,12 +36,15 @@ public class QuestionService {
                 .orElseThrow(() -> new QuestionNotFoundException("Question by this id and test-id doesnt exists"));
     }
 
+    public List<Question> getQuestionsByTestId(Long testId){
+        return questionRepository.getQuestionsByTestId(testId);
+    }
 
     private void checkQuestionExistsInTestByDescription(Long testId, String questionDescription) {
         if (questionRepository.existsByDescriptionAndTestId(questionDescription, testId)) {
             throw new QuestionByThisDescriptionExistsInThisTest("Question by this description already exists");
         }
-        ;
+
     }
 
     public Question addQuestionToTest(Long testId, QuestionRequest questionRequest) {

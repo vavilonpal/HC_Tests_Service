@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.service;
+package org.combs.micro.hc_tests_service.service.auth;
 
 
 import lombok.RequiredArgsConstructor;

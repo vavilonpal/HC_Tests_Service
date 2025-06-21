@@ -6,6 +6,9 @@ import org.combs.micro.hc_tests_service.mapper.ResultMapper;
 import org.combs.micro.hc_tests_service.response.ResultResponse;
 import org.combs.micro.hc_tests_service.service.ResultService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,10 @@ public class StudentResultController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ResultResponse> getResultById(@PathVariable Long id){
+
+        //todo
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
         ResultResponse response = resultMapper.entityToResponse(resultService.getResultById(id));
         return ResponseEntity.ok(response);
     }

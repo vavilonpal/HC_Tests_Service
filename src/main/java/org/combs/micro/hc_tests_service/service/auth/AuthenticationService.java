@@ -1,8 +1,7 @@
-package org.combs.micro.hc_tests_service.service;
+package org.combs.micro.hc_tests_service.service.auth;
 
 
 import lombok.RequiredArgsConstructor;
-import org.combs.micro.hc_tests_service.configuration.security.jwt.JwtService;
 import org.combs.micro.hc_tests_service.request.user.AuthenticationRequest;
 import org.combs.micro.hc_tests_service.response.AuthenticationResponse;
 import org.springframework.security.authentication.AuthenticationManager;

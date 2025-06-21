@@ -9,6 +9,11 @@ import org.combs.micro.hc_tests_service.response.SolveQuestionResponse;
 import org.combs.micro.hc_tests_service.service.SchoolSubjectService;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class QuestionMapper {
@@ -61,11 +66,17 @@ public class QuestionMapper {
                 .build();
     }
     public SolveQuestionResponse toSolveResponse(Question question){
+        Map<String, List<Object>> answer = question.getAnswer();
+        List<Object> answerOptions = new ArrayList<>(answer.get("incorrect"));
+        answerOptions.addAll(answer.get("correct"));
+        Collections.shuffle(answerOptions);
+
         return SolveQuestionResponse.builder()
                 .questionId(question.getId())
                 .description(question.getDescription())
                 .schoolSubjectName(question.getSchoolSubject().getName())
                 .difficultly(question.getDifficulty())
+                .answerOptions(answerOptions)
                 .build();
     }
 }

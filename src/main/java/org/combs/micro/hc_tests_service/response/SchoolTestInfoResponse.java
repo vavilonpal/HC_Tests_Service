@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class SchoolTestInfoResponse {
-
+    private Long id;
     private String title;
     private String teacherFullName;
     private TestType type;
