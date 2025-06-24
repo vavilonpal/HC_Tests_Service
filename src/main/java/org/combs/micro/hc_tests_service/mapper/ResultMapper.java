@@ -10,6 +10,8 @@ import org.combs.micro.hc_tests_service.service.SchoolTestService;
 import org.combs.micro.hc_tests_service.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.time.temporal.ChronoUnit;
+
 @Component
 @RequiredArgsConstructor
 public class ResultMapper {
@@ -17,10 +19,12 @@ public class ResultMapper {
     private final UserService userService;
 
     public ResultResponse entityToResponse(Result result){
+        //Integer solveTime  = Math.toIntExact(ChronoUnit.MINUTES.between(result.getStartedAt(), result.getFinishedAt()));
         return ResultResponse.builder()
                 .testTitle(result.getSchoolTest().getTitle())
                 .score(result.getScore())
                 .rankScore(result.getRankScore())
+                .solveTime(3)
                 .build();
     }
     public Result requestToResult(ResultRequest request){

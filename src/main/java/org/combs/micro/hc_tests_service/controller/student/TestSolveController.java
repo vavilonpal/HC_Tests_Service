@@ -56,9 +56,10 @@ public class TestSolveController {
         SchoolTestInfoResponse testInfoResponse = testMapper.toInfoResponse(schoolTestService.getTestById(id));
         return ResponseEntity.ok(testInfoResponse);
     }
+
     @GetMapping("/info")
     public ResponseEntity<List<SchoolTestInfoResponse>> getTestsInfo(@RequestParam(required = false) String type) {
-        if (type != null){
+        if (type != null) {
             log.info(type);
             TestType testType = TestType.valueOf(type.toUpperCase());
             log.info(testType.toString());
@@ -68,31 +69,32 @@ public class TestSolveController {
 
             return ResponseEntity.ok(testsInfoResponse);
         }
-            List<SchoolTestInfoResponse> testsInfoResponse = schoolTestService.getAllTests().stream()
-                    .map(testMapper::toInfoResponse)
-                    .toList();
+        List<SchoolTestInfoResponse> testsInfoResponse = schoolTestService.getAllTests().stream()
+                .map(testMapper::toInfoResponse)
+                .toList();
 
         return ResponseEntity.ok(testsInfoResponse);
     }
 
     @GetMapping("/info/{type}")
-    public ResponseEntity<List<SchoolTestInfoResponse>> getTestsInfoByType(@PathVariable String type){
+    public ResponseEntity<List<SchoolTestInfoResponse>> getTestsInfoByType(@PathVariable String type) {
         TestType testType = TestType.valueOf(type.toUpperCase());
         List<SchoolTestInfoResponse> testsInfoResponse = schoolTestService.getAllTestsByType(testType).stream().map(testMapper::toInfoResponse).toList();
         return ResponseEntity.ok(testsInfoResponse);
     }
+
     //Test solving start
     @PostMapping
-    public ResponseEntity<Set<SolveQuestionResponse>> startTestSolving(@RequestBody ResultRequest resultRequest) {
-
+    public ResponseEntity<List<SolveQuestionResponse>> startTestSolving(@RequestBody ResultRequest resultRequest) {
 
         Result result = resultService.createResult(resultRequest);
 
-        Set<SolveQuestionResponse> testQuestions = questionService.getAllTestQuestions(resultRequest.getTestId()).stream()
+        List<SolveQuestionResponse> solveQuestionResponses = questionService.getQuestionsByTestId(resultRequest.getTestId()).stream()
                 .map(questionMapper::toSolveResponse)
-                .collect(Collectors.toSet());
+                .peek(questionResponse -> questionResponse.setResultId(result.getId()))
+                .toList();
 
-        return ResponseEntity.ok(testQuestions);
+        return ResponseEntity.ok(solveQuestionResponses);
     }
 
     @PutMapping("/{resultId}")

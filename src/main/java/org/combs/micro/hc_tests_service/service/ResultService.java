@@ -10,6 +10,7 @@ import org.combs.micro.hc_tests_service.repository.ResultRepository;
 import org.combs.micro.hc_tests_service.request.ResultRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +38,12 @@ public class ResultService {
 
     public Result updateResult(Long id) {
         Result result = getResultById(id);
+
+        if (result.getFinishedAt() !=  null){
+            throw  new AttemptTimeSolveExpireException("Time to solve test is expire");
+        }
+        result.setFinishedAt(LocalDateTime.now());
+
         calculateResultPoints(result);
 
         return resultRepository.save(result);
@@ -76,7 +83,7 @@ public class ResultService {
     }
 
     public List<Result> getStudentAllResults(Long studentId) {
-        return null;
+        return resultRepository.getResultsByStudentId(studentId);
 
     }
 
@@ -84,4 +91,11 @@ public class ResultService {
 
     public void getReusltByIdAndStudentName(Long studentId, String username) {
     }
+
+    //todo not work
+    public void finishTestIfNotFinished(Long resultId) {
+        Result result = resultRepository.findById(resultId).orElseThrow();
+            result.setFinishedAt(LocalDateTime.now());
+            resultRepository.save(result);
+        }
 }

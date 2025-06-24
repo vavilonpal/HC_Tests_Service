@@ -57,6 +57,7 @@ public class UserMapper {
 
     public UserProfileResponse entityToProfileResponse(User user) {
         return UserProfileResponse.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .fullName(user.getFullName())
                 .email(user.getEmail())

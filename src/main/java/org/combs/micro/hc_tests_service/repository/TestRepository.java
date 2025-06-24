@@ -18,4 +18,5 @@ import java.util.List;
 public interface TestRepository extends JpaRepository<SchoolTest, Long> {
 
     List<SchoolTest> getSchoolTestsByType(TestType type);
+
 }

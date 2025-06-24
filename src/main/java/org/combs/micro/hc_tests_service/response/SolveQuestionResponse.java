@@ -12,6 +12,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class SolveQuestionResponse {
+    private Long resultId;
     private Long questionId;
     private String description;
     private String schoolSubjectName;
