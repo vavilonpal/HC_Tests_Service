@@ -18,13 +18,19 @@ public class ResultMapper {
     private final SchoolTestService testService;
     private final UserService userService;
 
-    public ResultResponse entityToResponse(Result result){
-        //Integer solveTime  = Math.toIntExact(ChronoUnit.MINUTES.between(result.getStartedAt(), result.getFinishedAt()));
+    public ResultResponse entityToResponse(Result result) {
+        Integer solveTime = null;
+        if (result.getStartedAt() != null && result.getFinishedAt() != null) {
+            solveTime = Math.toIntExact(ChronoUnit.MINUTES.between(
+                    result.getStartedAt(), result.getFinishedAt()));
+        }
+
         return ResultResponse.builder()
-                .testTitle(result.getSchoolTest().getTitle())
+                .id(result.getId())
+                .testTitle(result.getSchoolTest() != null ? result.getSchoolTest().getTitle() : null)
                 .score(result.getScore())
                 .rankScore(result.getRankScore())
-                .solveTime(3)
+                .solveTime(solveTime)
                 .build();
     }
     public Result requestToResult(ResultRequest request){

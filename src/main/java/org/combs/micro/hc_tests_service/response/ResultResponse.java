@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ResultResponse {
+    private Long id;
     private String testTitle;
     private Integer score;
     private Integer rankScore;
