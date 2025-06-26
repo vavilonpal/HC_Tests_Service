@@ -36,6 +36,7 @@ public class AnswerSolveController {
         Answer answer = answerService.createAnswer(request);
         answerCacheRepository.save(answer);
         AnswerResponse response = answerMapper.answerToResponse(answer);
+
         return ResponseEntity.ok(response);
     }
 

@@ -41,7 +41,7 @@ public class AnswerService {
     public Answer createAnswer(AnswerRequest request) {
         Answer answer = answerMapper.toAnswer(request);
         pointsHandler.defineAnswerCorrectness(answer);
-
+        log.info(answer.toString());
         return answerRepository.save(answer);
     }
     @Transactional
