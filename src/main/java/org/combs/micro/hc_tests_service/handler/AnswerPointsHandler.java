@@ -1,6 +1,8 @@
 package org.combs.micro.hc_tests_service.handler;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 import org.combs.micro.hc_tests_service.entity.Answer;
 import org.combs.micro.hc_tests_service.entity.Question;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
@@ -11,127 +13,116 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.lang3.StringUtils.isNumeric;
+
 
 // todo допилить метод для текста, все остальное вроде работает
 @Component
+@Slf4j
 public class AnswerPointsHandler {
     private Integer rankPoints = 0;
     private Integer scorePoints = 0;
 
     /**
      * Метод определяет сколько нжуно дать очков за полученный ответ
+     *
      * @param answer - ответ студента
      */
     public void defineAnswerCorrectness(Answer answer) {
         Question question = answer.getQuestion();
-        // Если стоит флаг "не проверяемый", то оставляем выдачу очков на усмотрение учителя
-        if (question.getCheckType()) {
+
+        // Если вопрос не подлежит автопроверке — очки остаются нулевыми
+        if (!question.getCheckType()) {
             answer.setRankPoints(rankPoints);
             answer.setScorePoints(scorePoints);
+            return;
         }
 
-        if (question.getType().equals(QuestionType.multiple_choice)) {
-            multiChoiceTypeHandle(answer, question);
-        }
-        if (question.getType().equals(QuestionType.single_choice)) {
-            singleChoiceTypeHandle(answer, question);
-        }
-        if (question.getType().equals(QuestionType.text)) {
-            textTypeHandle(answer, question);
+        switch (question.getType()) {
+            case multiple_choice -> multiChoiceTypeHandle(answer, question);
+            case single_choice -> singleChoiceTypeHandle(answer, question);
+            case text -> textTypeHandle(answer, question);
         }
     }
 
-    /**
-     * Метод призван обрбатывать ответ типа "text"
-     * @param answer - ответ студента
-     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
-     */
+    /** Обработка текстового ответа */
     private void textTypeHandle(Answer answer, Question question) {
-        String correctAnswer = (String) question
-                .getAnswer()
-                .get("correct")
-                .get(0);
+        JsonNode correctNode = question.getAnswer().get("correct");
+        JsonNode studentNode = answer.getStudentAnswer().get("answer");
 
-        String studentAnswer = (String) answer
-                .getStudentAnswer()
-                .get("answer")
-                .get(0);
+        if (correctNode == null || !correctNode.isArray() || correctNode.isEmpty()) return;
+        if (studentNode == null || !studentNode.isArray() || studentNode.isEmpty()) return;
 
-        if (studentAnswer.isBlank()) {
-            return;
-        }
-        // Если ответ числовой
-        if (isNumeric(correctAnswer)) {
-            if (Integer.parseInt(correctAnswer) == Integer.parseInt(studentAnswer)) {
-                this.rankPoints = question.getRankPoints();
-                this.scorePoints = question.getScorePoints();
+        String correct = correctNode.get(0).asText().strip();
+        String student = studentNode.get(0).asText().strip();
+
+        if (student.isBlank()) return;
+
+        if (isNumeric(correct) && isNumeric(student)) {
+            if (Double.compare(Double.parseDouble(correct), Double.parseDouble(student)) == 0) {
+                assignPoints(question);
+                setPointsToAnswer(answer);
                 return;
             }
-            ;
         }
-        // Если ответ строковой
-        if (correctAnswer.equalsIgnoreCase(studentAnswer.strip())) {
-            this.rankPoints = question.getRankPoints();
-            this.scorePoints = question.getScorePoints();
-            return;
+
+        if (correct.equalsIgnoreCase(student)) {
+            assignPoints(question);
         }
-        ;
+
+        setPointsToAnswer(answer);
     }
 
-
-
-    /**
-     * Метод призван обрбатывать ответ типа "multi-Choice"
-     * @param answer - ответ студента
-     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
-     */
+    /** Обработка множественного выбора */
     private void multiChoiceTypeHandle(Answer answer, Question question) {
-        int countOfCorrectAnswers;
-        Set<String> correctAnswers = question.getAnswer().get("correct").stream()
-                .map(Objects::toString)
-                .collect(Collectors.toSet());
-        countOfCorrectAnswers = correctAnswers.size();
+        JsonNode correctNode = question.getAnswer().get("correct");
+        JsonNode studentNode = answer.getStudentAnswer().get("answer");
 
-        Set<String> studentAnswers = answer.getStudentAnswer().get("answer").stream()
-                .map(Objects::toString)
-                .collect(Collectors.toSet());
+        if (correctNode == null || !correctNode.isArray()) return;
 
-        if (studentAnswers.isEmpty()) {
-            return;
+        Set<String> correctAnswers = new HashSet<>();
+        for (JsonNode node : correctNode) {
+            correctAnswers.add(node.asText());
         }
 
-        int  countOfStudentCorrectAnswers = 0;
-        for (String studentAnswer : studentAnswers) {
-            if (correctAnswers.contains(studentAnswer)) {
-                countOfStudentCorrectAnswers++;
-            }else {
-                countOfStudentCorrectAnswers--;
+        int correctTotal = correctAnswers.size();
+
+        Set<String> studentAnswers = new HashSet<>();
+        if (studentNode != null && studentNode.isArray()) {
+            for (JsonNode node : studentNode) {
+                studentAnswers.add(node.asText());
             }
         }
 
-        calculatePoints(countOfCorrectAnswers, countOfStudentCorrectAnswers, question);
-        setPointsToAnswer(answer);
+        if (studentAnswers.isEmpty()) return;
 
-    }
-
-
-    /**
-     * Метод призван обрбатывать ответ типа "single-Choice"
-     * @param answer - ответ студента
-     * @param question - вопрос, на который был дан ответ, нужен для сравнения и нащанчения очков
-     */
-    private void singleChoiceTypeHandle(Answer answer, Question question) {
-        Object correctAnswer = question.getAnswer().get("correct").get(0);
-        Object studentAnswer = answer.getStudentAnswer().get("answer").get(0);
-
-        if (studentAnswer == null || studentAnswer.toString().isBlank()) {
-            return;
+        int correctMatches = 0;
+        for (String studentAnswer : studentAnswers) {
+            if (correctAnswers.contains(studentAnswer)) {
+                correctMatches++;
+            } else {
+                correctMatches--;
+            }
         }
 
-        String correctStr = correctAnswer.toString().trim();
-        String studentStr = studentAnswer.toString().trim();
+        calculatePoints(correctTotal, correctMatches, question);
+        setPointsToAnswer(answer);
+    }
 
-        // Попытка сравнения как чисел
+    /** Обработка одиночного выбора */
+    private void singleChoiceTypeHandle(Answer answer, Question question) {
+        JsonNode correctNode = question.getAnswer().get("correct");
+        log.info(correctNode.toString());
+        JsonNode studentNode = answer.getStudentAnswer().get("answer");
+
+        if (correctNode == null || !correctNode.isArray() || correctNode.isEmpty()) return;
+        if (studentNode == null || !studentNode.isArray() || studentNode.isEmpty()) return;
+
+        String correctStr = correctNode.get(0).asText().trim();
+        String studentStr = studentNode.get(0).asText().trim();
+
+        if (studentStr.isBlank()) return;
+
         if (isNumeric(correctStr) && isNumeric(studentStr)) {
             try {
                 double correctNum = Double.parseDouble(correctStr);
@@ -139,55 +130,37 @@ public class AnswerPointsHandler {
 
                 if (Double.compare(correctNum, studentNum) == 0) {
                     assignPoints(question);
-                    setPointsToAnswer(answer);
                 }
-                // при неправильном ответе ставим нулевые значения
-                setPointsToAnswer(answer);
             } catch (NumberFormatException e) {
-                System.out.println("NumberFormatException");
+                System.out.println("NumberFormatException: " + e.getMessage());
             }
-            return;
+        } else if (correctStr.equalsIgnoreCase(studentStr)) {
+            assignPoints(question);
         }
 
-        // Строковое сравнение
-        if (correctStr.equalsIgnoreCase(studentStr)) {
-            assignPoints(question);
-            setPointsToAnswer(answer);
-        }
         setPointsToAnswer(answer);
     }
 
-
-    /**
-     * Метод вычисляет процент правлиьных ответов
-     * и на его основе устанавливает количество очков
-     * @param countOfCorrectAnswers - число правилньых ответов вопроса
-     * @param countOfStudentCorrectAnswers - число правильных ответов данныз студентом
-     * @param question - вопрос на который был дан ответ
-     */
-    private void calculatePoints(int countOfCorrectAnswers, int countOfStudentCorrectAnswers, Question question) {
-
-        if (countOfCorrectAnswers == countOfStudentCorrectAnswers){
+    /** Вычисление очков по проценту правильных ответов */
+    private void calculatePoints(int correctCount, int studentCorrectCount, Question question) {
+        if (correctCount == studentCorrectCount) {
             assignPoints(question);
-        }
-        // Если выбрано больше неправильных овтетов чем правлиьных, то оставляем нулевые очки
-        if (countOfStudentCorrectAnswers < 0){
             return;
         }
 
-        float correctnessOfAnswers = 0.0f;
-        if (countOfCorrectAnswers > 0) {
-            correctnessOfAnswers = ((float) countOfStudentCorrectAnswers / countOfCorrectAnswers);
-        }
+        if (studentCorrectCount < 0) return;
 
-        this.rankPoints = Math.round(question.getRankPoints() * correctnessOfAnswers);
-        this.scorePoints = Math.round(question.getScorePoints() * correctnessOfAnswers);
+        float ratio = correctCount > 0 ? (float) studentCorrectCount / correctCount : 0;
+
+        this.rankPoints = Math.round(question.getRankPoints() * ratio);
+        this.scorePoints = Math.round(question.getScorePoints() * ratio);
     }
 
 
-    private void assignPoints(Question question) {
-        this.rankPoints = question.getRankPoints();
-        this.scorePoints = question.getScorePoints();
+
+
+    private static boolean isNumeric(String str) {
+        return str != null && str.matches("-?\\d+(\\.\\d+)?");
     }
 
     private void setPointsToAnswer(Answer answer) {
@@ -195,9 +168,13 @@ public class AnswerPointsHandler {
         answer.setScorePoints(scorePoints);
     }
 
-    private static boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
+    private void assignPoints(Question question) {
+        this.rankPoints = question.getRankPoints();
+        this.scorePoints = question.getScorePoints();
     }
 
 
+
 }
+
+

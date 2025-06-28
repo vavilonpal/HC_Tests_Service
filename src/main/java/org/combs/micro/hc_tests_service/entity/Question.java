@@ -1,6 +1,7 @@
 package org.combs.micro.hc_tests_service.entity;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -8,6 +9,9 @@ import org.combs.micro.hc_tests_service.converter.AnswerJsonConverter;
 import org.combs.micro.hc_tests_service.enums.QuestionType;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +41,9 @@ public class Question {
     private String description;
 
 
-    // todo замапить борбаотку ответа как массив
-    @Convert(converter = AnswerJsonConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "answer", columnDefinition = "jsonb")
-    private Map<String, List<Object>> answer;
+    private JsonNode answer;
 
     @ManyToOne
     @JoinColumn(name = "school_subj_id")

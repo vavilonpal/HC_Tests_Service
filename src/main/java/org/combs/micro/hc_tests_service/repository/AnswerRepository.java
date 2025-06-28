@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findAllByStudentIdAndResultId(Long studentId, Long resultId);
 
-
+    Optional<Answer> findAnswerByResultIdAndQuestionId(Long resultId, Long questionId);
     Optional<Answer> findByCreatedAtAndId(LocalDateTime createdAt, Long id);
 }

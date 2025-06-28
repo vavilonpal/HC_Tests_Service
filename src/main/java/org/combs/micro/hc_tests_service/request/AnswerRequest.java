@@ -1,5 +1,6 @@
 package org.combs.micro.hc_tests_service.request;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,18 +21,8 @@ public class AnswerRequest {
     private Long resultId;
     @NotNull
     private Long questionId;
-    @Builder.Default
-    private Map<String, List<Object>> studentAnswer = new HashMap<>() {{
-        put("answer", new ArrayList<>());
-    }};
+    
+    private JsonNode studentAnswer;
 
-
-    public Map<String, List<Object>> getStudentAnswer() {
-        if (studentAnswer == null || !studentAnswer.containsKey("answer")) {
-            studentAnswer = new HashMap<>();
-            studentAnswer.put("answer", new ArrayList<>());
-        }
-        return studentAnswer;
-    }
 
 }

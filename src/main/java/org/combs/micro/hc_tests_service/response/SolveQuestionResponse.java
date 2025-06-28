@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Set;
 
@@ -17,5 +18,5 @@ public class SolveQuestionResponse {
     private String description;
     private String schoolSubjectName;
     private Integer difficultly;
-    private List<Object> answerOptions;
+    private List<String> answerOptions;
 }

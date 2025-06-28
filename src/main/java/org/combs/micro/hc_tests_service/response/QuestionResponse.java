@@ -2,6 +2,7 @@ package org.combs.micro.hc_tests_service.response;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class QuestionResponse {
     private Long testId;
     private String schoolSubjectName;
     private String description;
-    private Map<String, List<Object>> answer;
+    private JsonNode answer;
     private QuestionType type;
     private Integer difficultly;
     private Integer rankPoints;
