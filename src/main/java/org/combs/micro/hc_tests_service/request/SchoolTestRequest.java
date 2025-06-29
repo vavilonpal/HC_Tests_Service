@@ -2,6 +2,7 @@ package org.combs.micro.hc_tests_service.request;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,8 @@ import org.combs.micro.hc_tests_service.entity.SchoolSubject;
 import org.combs.micro.hc_tests_service.enums.Complexity;
 import org.combs.micro.hc_tests_service.enums.TestType;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 
 @Data
@@ -37,9 +40,9 @@ public class SchoolTestRequest {
     @NotNull(message = "Set a class level of the test")
     private Integer classLevel;
 
-    @Size(max = 255, message = "Too long description")
     private String description;
 
     @Max(value = 90, message = "Test duration has been max 90 minutes length")
     private Integer duration;
+
 }

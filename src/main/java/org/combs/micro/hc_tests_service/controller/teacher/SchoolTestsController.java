@@ -37,6 +37,14 @@ public class SchoolTestsController {
     }
     //todo Shows test image for teacher
 
+    @GetMapping("/{teacherId}")
+    public ResponseEntity<List<SchoolTestInfoResponse>> getAllTestsByTeacher(@PathVariable Long teacherId) {
+
+        List<SchoolTestInfoResponse> testInfoResponses = schoolTestService.getAllTestsByTeacherId(teacherId).stream()
+                .map(testMapper::toInfoResponse)
+                .toList();
+        return ResponseEntity.ok(testInfoResponses);
+    }
 
 
     @PostMapping

@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/tests")
-public class QuestionOperationsController {
+public class  QuestionOperationsController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
 

@@ -61,4 +61,8 @@ public class SchoolTestService {
     public List<SchoolTest> getAllTestsByType(TestType type) {
         return  testRepository.getSchoolTestsByType(type);
     }
+
+    public List<SchoolTest> getAllTestsByTeacherId(Long teacherId) {
+        return testRepository.findAllByTeacherId(teacherId);
+    }
 }

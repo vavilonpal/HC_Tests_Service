@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public interface TestRepository extends JpaRepository<SchoolTest, Long> {
-
+    List<SchoolTest> findAllByTeacherId(Long teacherId);
     List<SchoolTest> getSchoolTestsByType(TestType type);
 
 }

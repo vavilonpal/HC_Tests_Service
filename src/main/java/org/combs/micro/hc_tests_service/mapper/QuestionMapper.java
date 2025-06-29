@@ -63,6 +63,7 @@ public class QuestionMapper {
                 .description(question.getDescription())
                 .answer(question.getAnswer())
                 .type(question.getType())
+                .checkType(question.getCheckType())
                 .difficultly(question.getDifficulty())
                 .testPoints(question.getScorePoints())
                 .rankPoints(question.getRankPoints())

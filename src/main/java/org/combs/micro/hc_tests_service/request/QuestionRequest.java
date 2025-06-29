@@ -29,7 +29,7 @@ public class QuestionRequest {
     @NotNull(message = "Set subject of question")
     private String schoolSubjectName;
 
-    @Size(min = 10,max = 255, message = "Write description of question")
+    @Size(min = 5,max = 255, message = "Write description of question")
     private String description;
 
     @NotNull(message = "Set answer for question")

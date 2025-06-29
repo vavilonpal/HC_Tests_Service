@@ -28,6 +28,7 @@ public class QuestionResponse {
     private String description;
     private JsonNode answer;
     private QuestionType type;
+    private Boolean checkType;
     private Integer difficultly;
     private Integer rankPoints;
     private Integer testPoints;
