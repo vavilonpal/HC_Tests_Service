@@ -1,4 +1,4 @@
-package org.combs.micro.hc_tests_service.kafka;
+package org.combs.micro.hc_tests_service.kafka.consumer.config;
 
 
 import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
@@ -17,7 +17,7 @@ import java.util.Map;
 //Она указывает Spring на необходимость поиска аннотации KafkaListener в бинах
 // и конфигурирования необходимой инфраструктуры для обработки сообщений Kafka.
 @EnableKafka
-public class KafkaConsumer {
+public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 

@@ -3,6 +3,7 @@ package org.combs.micro.hc_tests_service.controller.student;
 
 import lombok.RequiredArgsConstructor;
 import org.combs.micro.hc_tests_service.entity.Answer;
+import org.combs.micro.hc_tests_service.kafka.producer.AnswerKafkaProducer;
 import org.combs.micro.hc_tests_service.mapper.AnswerMapper;
 import org.combs.micro.hc_tests_service.repository.cacheRepository.AnswerCacheRepository;
 import org.combs.micro.hc_tests_service.request.AnswerRequest;
@@ -23,14 +24,13 @@ public class AnswerSolveController {
     private final AnswerMapper answerMapper;
     private final AnswerService answerService;
     private final AnswerCacheRepository answerCacheRepository;
+    private final AnswerKafkaProducer answerProducer;
 
     @GetMapping("/answer/{id}")
     public ResponseEntity<AnswerResponse> getAnswer(@PathVariable Long id) {
 
         AnswerResponse cachedAnswerResponse = answerCacheRepository.findById(id);
         if (cachedAnswerResponse != null) {
-            System.out.println("fgfggg");
-
             return ResponseEntity.ok(cachedAnswerResponse);
         }
 
@@ -48,39 +48,18 @@ public class AnswerSolveController {
      */
     @PostMapping("/{resultId}/answer")
     public ResponseEntity<?> sendAnswer(@PathVariable Long resultId,
-                                        @RequestBody AnswerRequest request) throws IOException {
-
-        try {
-            request.setResultId(resultId);
-            Answer answer = answerService.createAnswer(request);
-            answerCacheRepository.save(answer);
-            AnswerResponse response = answerMapper.answerToResponse(answer);
-
-            return ResponseEntity.ok(response);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create Answer");
-        }
-
+                                        @RequestBody AnswerRequest request) {
+        request.setResultId(resultId);
+        answerProducer.sendAnswer(request);
+        return ResponseEntity.accepted().build(); // 202 Accepted
     }
 
-    /**
-     * Обновление отправленного ответа
-     *
-     * @param answerId
-     * @param request
-     * @return
-     */
     @PutMapping("/{resultId}/answer")
     public ResponseEntity<?> updateAnswer(@PathVariable Long resultId,
-                                          @RequestBody AnswerRequest request)  {
-        try {
+                                          @RequestBody AnswerRequest request) {
             Answer answer = answerService.updateAnswerByResultIdAndQuestionId(resultId, request);
             AnswerResponse response = answerMapper.answerToResponse(answer);
             return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to update Answer");
-        }
+
     }
 }

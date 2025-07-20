@@ -42,7 +42,7 @@ public class AnswerService {
     }
 
     @Transactional
-    public Answer createAnswer(AnswerRequest request) throws IOException {
+    public Answer createAnswer(AnswerRequest request){
         Answer answer = answerMapper.toAnswer(request);
         pointsHandler.defineAnswerCorrectness(answer);
         log.info(answer.toString());

@@ -30,7 +30,7 @@ public class AnswerMapper {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    public Answer toAnswer(AnswerRequest request) throws IOException {
+    public Answer toAnswer(AnswerRequest request){
         Question question = questionService.getQuestionById(request.getQuestionId());
         Result result = resultService.getResultById(request.getResultId());
         User student = userService.getUserById(request.getStudentId());
