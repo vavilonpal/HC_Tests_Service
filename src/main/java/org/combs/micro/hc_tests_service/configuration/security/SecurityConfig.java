@@ -26,9 +26,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 
-
-
-    @Bean
+    // Бин для прода
+    /*@Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -54,8 +53,8 @@ public class SecurityConfig {
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
                 )
                 .build();
-    }
-    /*@Bean()
+    }*/
+    @Bean
     public SecurityFilterChain securityFilterChainForDeveloping(final HttpSecurity http) throws Exception {
         return http
                 .cors(Customizer.withDefaults())
@@ -65,7 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/**").permitAll()
                 ).build();
 
-    }*/
+    }
 
 
     @Bean
